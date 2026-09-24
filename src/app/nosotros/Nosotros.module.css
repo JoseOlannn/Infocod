@@ -1,0 +1,533 @@
+.nosotrosPage {
+  background-color: #ffffff;
+  color: #000000;
+  height: 100vh;
+  display: flex;
+  padding-top: 80px;
+  /* navbar offset */
+  overflow: hidden;
+  position: relative;
+}
+
+/* Background elements */
+.ambientGlow {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(120px);
+  z-index: 0;
+  pointer-events: none;
+}
+
+.glow1 {
+  top: -10%;
+  left: -10%;
+  width: 500px;
+  height: 500px;
+  background: rgba(79, 142, 247, 0.05);
+}
+
+.glow2 {
+  bottom: -10%;
+  right: -10%;
+  width: 600px;
+  height: 600px;
+  background: rgba(0, 201, 107, 0.04);
+}
+
+/* Structural Animated Lines */
+.topLine {
+  position: absolute;
+  top: 80px; /* Se fusiona con el borde del navbar */
+  left: 0;
+  height: 2px;
+  width: 0;
+  /* Animated via GSAP to 10vw */
+  background: #000000;
+  z-index: 20;
+}
+
+.verticalLine {
+  position: absolute;
+  top: 80px; /* Cuelga directamente del navbar */
+  left: 10vw;
+  /* Must match topLine final width */
+  width: 2px;
+  height: 0;
+  /* Animated via GSAP to 70vh */
+  background: #000000;
+  z-index: 20;
+}
+
+/* SIDEBAR */
+.sidebar {
+  width: 30vw;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  padding-top: 6vh; /* Menor separación para centrar las 5 opciones */
+  /* Exactly matches the top of the structural line */
+  padding-left: calc(10vw + 2rem);
+  /* Text starts exactly 2rem after the vertical line */
+  position: relative;
+  z-index: 30;
+  background: transparent;
+}
+
+.menuList {
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+  position: relative;
+  z-index: 1;
+}
+
+.menuItem {
+  font-family: var(--font-outfit), sans-serif;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #94a3b8;
+  cursor: pointer;
+  position: relative;
+  transition: color 0.4s ease, transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  padding: 0.5rem 0;
+  background: none;
+  border: none;
+  text-align: left;
+  outline: none;
+  opacity: 0;
+  /* GSAP reveals this */
+  transform: translateX(-20px);
+}
+
+.menuItem:hover {
+  color: #475569;
+}
+
+.menuItemActive {
+  color: #000000;
+  transform: translateX(10px) !important;
+}
+
+/* Branch line from vertical timeline to text */
+.menuItem::before {
+  content: '';
+  position: absolute;
+  left: -2rem;
+  /* Matches the 2rem padding-left of the sidebar */
+  top: 50%;
+  transform: translateY(-50%) scaleX(0);
+  transform-origin: left;
+  width: 1.5rem;
+  height: 2px;
+  background: #000000;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.menuItemActive::before,
+.menuItem:hover::before {
+  transform: translateY(-50%) scaleX(1);
+}
+
+.scribbleContainer {
+  position: absolute;
+  bottom: -10px;
+  left: 0;
+  width: 100%;
+  height: 15px;
+  pointer-events: none;
+  opacity: 0;
+}
+
+.scribblePath {
+  stroke: #000000;
+  stroke-width: 3;
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* CONTENT AREA */
+.contentArea {
+  flex-grow: 1;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  background: transparent;
+}
+
+/* LA MANTA (Curtain transition) */
+.manta {
+  position: absolute;
+  top: -100%;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #ffffff; /* Cortina blanca solicitada por el usuario */
+  z-index: 50;
+}
+
+.activeContentWrapper {
+  width: 100%;
+  height: calc(100vh - 80px);
+  max-width: 1400px;
+  padding: 0 4rem; /* Aligns flush with top */
+  position: relative;
+  z-index: 10;
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start; /* keep text left */
+}
+
+.textContent {
+  flex: 0 0 45%;
+  max-width: 550px;
+  padding-top: 4rem; /* Baja el texto para que no pegue con el techo */
+}
+
+.mascotRight {
+  position: absolute;
+  right: 0;
+  top: 5rem; /* Baja al zorro para que se alinee con el texto */
+  width: 45vw; /* Fills the right side */
+  height: 80vh; /* Leaves a gap at the bottom for the red widget */
+  pointer-events: none;
+  z-index: 5;
+}
+
+.mascotFloat {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  transform-origin: bottom center;
+  animation: float 6s ease-in-out infinite;
+}
+
+@keyframes float {
+  0% { transform: scale(1.6) translateY(-30px); }
+  50% { transform: scale(1.6) translateY(-40px); }
+  100% { transform: scale(1.6) translateY(-30px); }
+}
+
+/* Typographic Elements inside Content */
+.title {
+  font-family: var(--font-outfit), sans-serif;
+  font-size: 5rem;
+  font-weight: 900;
+  color: #000000;
+  margin-bottom: 1.5rem;
+  line-height: 0.95;
+  letter-spacing: -0.04em;
+}
+
+.sectionText {
+  font-size: 1.5rem;
+  color: #333333;
+  line-height: 1.5;
+  max-width: 100%;
+  text-align: justify;
+}
+
+.sectionTitle {
+  font-family: var(--font-outfit), sans-serif;
+  font-size: 5.5rem;
+  font-weight: 900;
+  letter-spacing: -0.02em;
+  color: #000000;
+  margin-bottom: 2rem;
+  line-height: 1.05;
+}
+
+.subtitle {
+  color: #1a1a1a;
+  font-family: var(--font-manrope), sans-serif;
+  font-size: 1.25rem;
+  line-height: 1.7;
+  margin-bottom: 2rem;
+}
+
+.highlight {
+  color: #000000;
+}
+
+/* Cards */
+.tactileCard {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 2rem;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  box-shadow:
+    0 10px 30px rgba(0, 0, 0, 0.03),
+    0 1px 3px rgba(0, 0, 0, 0.02);
+  margin-bottom: 1.5rem;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.tactileCard:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.05);
+}
+
+.tactileCard h3 {
+  font-family: var(--font-outfit), sans-serif;
+  font-size: 1.6rem;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  color: #000000;
+  margin-bottom: 0.5rem;
+}
+
+.tactileCard p {
+  color: #475569;
+  line-height: 1.7;
+  font-size: 1.1rem;
+  font-family: var(--font-manrope), sans-serif;
+}
+
+/* Valores Grid */
+.valoresGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+
+.valorIcon {
+  color: #000000;
+  margin-bottom: 1rem;
+}
+
+.primaryBtn {
+  display: inline-block;
+  background: #000000;
+  color: #ffffff;
+  padding: 1.2rem 2.5rem;
+  border-radius: 8px;
+  font-family: var(--font-outfit), sans-serif;
+  font-weight: 700;
+  font-size: 1.1rem;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  border: 1px solid #000000;
+  margin-top: 1rem;
+}
+
+.primaryBtn:hover {
+  background: #ffffff;
+  color: #000000;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+@media (max-width: 992px) {
+  .nosotrosPage {
+    flex-direction: column;
+    height: auto;
+    overflow: auto;
+  }
+
+  .topLine,
+  .verticalLine {
+    display: none;
+  }
+
+  .sidebar {
+    width: 100%;
+    padding: 2rem;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  }
+
+  .menuList {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  .menuItem {
+    padding-left: 0;
+    font-size: 1.1rem;
+    opacity: 1;
+    transform: none;
+  }
+
+  .menuItem::before {
+    display: none;
+  }
+
+  .activeContentWrapper {
+    flex-direction: column-reverse;
+    padding: 2rem;
+    text-align: center;
+  }
+
+  .title {
+    font-size: 3.5rem;
+  }
+
+  .sectionTitle {
+    font-size: 2.5rem;
+  }
+
+  .valoresGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* --- Por qué Infocod Layout --- */
+.porqueContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  padding-bottom: 25vh; /* Pushes the whole block further up */
+}
+
+.porqueBlock {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 400px; /* Wider block for bigger cards */
+}
+
+.neumorphicCard {
+  width: 360px; /* Much bigger */
+  height: 230px; /* Much bigger */
+  background: #ffffff;
+  border-radius: 25px;
+  border: 12px solid #eaeaea; /* The thick grey rim */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 
+    /* Outer drop shadow */
+    15px 15px 30px rgba(0, 0, 0, 0.15),
+    /* Inner shadow to make the white center look slightly recessed */
+    inset 8px 8px 15px rgba(0, 0, 0, 0.1),
+    inset -8px -8px 15px rgba(255, 255, 255, 1);
+  margin-bottom: 3rem;
+}
+
+.neumorphicText {
+  font-family: var(--font-outfit), sans-serif;
+  font-size: 5.5rem; /* Bigger text */
+  font-weight: 900;
+  color: #000000;
+  letter-spacing: 2px;
+}
+
+.porquePlus {
+  font-family: var(--font-outfit), sans-serif;
+  font-size: 10rem; /* Bigger plus */
+  font-weight: 900;
+  color: #000000;
+  margin: 0 4rem;
+  line-height: 0;
+  padding-bottom: 10rem;
+}
+
+.porqueText {
+  font-family: var(--font-inter), sans-serif;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #000000;
+  text-align: center;
+  line-height: 1.6;
+}
+
+/* --- Nuestra Misión Layout --- */
+.misionContainer {
+  display: flex;
+  align-items: flex-start; /* Alinea todo arriba */
+  justify-content: space-between;
+  width: 100%;
+  height: 100%;
+  gap: 2rem;
+  padding-top: 4rem; /* Lo separa del navbar pero lo mantiene arriba */
+  padding-right: 4rem;
+}
+
+.misionMascot {
+  flex: 0 0 45%;
+  height: 90vh; /* Permite que la imagen crezca muchísimo más */
+  position: relative;
+}
+
+.misionMascotFloat {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  transform-origin: bottom center;
+  animation: floatHuge 6s ease-in-out infinite;
+}
+
+@keyframes floatHuge {
+  0% { transform: scale(2.5) translateY(-70px); }
+  50% { transform: scale(2.5) translateY(-80px); }
+  100% { transform: scale(2.5) translateY(-70px); }
+}
+
+.misionText {
+  flex: 0 0 50%;
+  max-width: 650px;
+}
+
+.misionTitle {
+  font-family: var(--font-outfit), sans-serif;
+  font-size: 4.5rem;
+  font-weight: 900;
+  color: #000000;
+  margin-bottom: 1.5rem;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.misionParagraph {
+  font-family: var(--font-inter), sans-serif;
+  font-size: 1.25rem;
+  line-height: 1.6;
+  color: rgba(0, 0, 0, 0.85);
+  text-align: justify;
+}
+
+/* --- Nuestra Visión Layout --- */
+.visionContainer {
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  width: 100%;
+  height: 100%;
+  padding-top: 4rem;
+}
+
+.visionText {
+  flex: 0 0 50%;
+  max-width: 650px;
+  z-index: 20;
+}
+
+.visionMascot {
+  position: absolute;
+  right: -10vw; /* Push heavily to the right edge to avoid text overlap */
+  bottom: -5vh; /* Sink slightly to anchor to the corner */
+  width: 35vw; /* Narrower base so scaling doesn't bleed into text */
+  height: 75vh;
+  z-index: 10;
+  pointer-events: none;
+}
+
+.visionMascotFloat {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  transform-origin: bottom right;
+  animation: floatVision 6s ease-in-out infinite;
+}
+
+@keyframes floatVision {
+  0% { transform: scale(1.8) translateY(-80px); }
+  50% { transform: scale(1.8) translateY(-95px); }
+  100% { transform: scale(1.8) translateY(-80px); }
+}

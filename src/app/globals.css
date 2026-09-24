@@ -1,0 +1,103 @@
+@import "tailwindcss";
+
+@theme {
+  /* Oficial Brand Colors */
+  --color-brand-blue: #4F8EF7;
+  --color-brand-green: #00C96B;
+  --color-brand-purple: #6C2BFF;
+  --color-brand-gray-light: #F5F7FA;
+  --color-brand-gray-dark: #2E3440;
+  
+  --font-sans: var(--font-manrope), ui-sans-serif, system-ui, sans-serif;
+  --font-sora: var(--font-sora), ui-sans-serif, system-ui, sans-serif;
+  --font-manrope: var(--font-manrope), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-jetbrains), ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+}
+
+:root {
+  --color-brand-blue: #4F8EF7;
+  --color-brand-green: #00C96B;
+  --color-brand-purple: #6C2BFF;
+  --background: #F5F7FA;
+  --foreground: #2E3440;
+  --font-heading: var(--font-sora), ui-sans-serif, system-ui, sans-serif;
+  --font-body: var(--font-manrope), ui-sans-serif, system-ui, sans-serif;
+}
+
+body {
+  background-color: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-manrope), var(--font-sans);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+
+  /* Anti-Copy (Deshabilitar selección de texto globalmente) */
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* Permitir selección de texto en inputs y textareas para que los formularios sigan funcionando */
+input, textarea {
+  -webkit-user-select: auto;
+  -moz-user-select: auto;
+  -ms-user-select: auto;
+  user-select: auto;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-sora), var(--font-heading);
+}
+
+
+/* Glassmorphism Utilities (Light Mode) */
+.glass {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.glass-card {
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.05);
+}
+
+@keyframes marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.animate-marquee {
+  animation: marquee 20s linear infinite;
+}
+
+/* Custom Scrollbar for a premium feel */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #f8fafc;
+}
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #475569;
+}
+
+/* GSAP Navbar Themes */
+.theme-purple {
+  background-color: #1a0b2e !important;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5) !important;
+}
+
+.theme-green {
+  background-color: #0b5c32 !important;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3) !important;
+}

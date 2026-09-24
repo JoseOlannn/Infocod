@@ -1,0 +1,9 @@
+.scrambleText {
+  display: inline-block;
+  min-height: 2em; /* Keeps height stable during scramble */
+}
+
+.dud {
+  color: #00c96b; /* Brand green */
+  opacity: 0.7;
+}

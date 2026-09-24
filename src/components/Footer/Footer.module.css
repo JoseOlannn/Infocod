@@ -1,0 +1,147 @@
+.footer {
+  background-color: #000000;
+  color: white;
+  padding: 5rem 2rem 2rem;
+  margin-top: auto;
+  position: relative;
+  overflow: hidden;
+}
+
+.footer::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -10%;
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, rgba(108, 43, 255, 0.4) 0%, transparent 70%);
+  border-radius: 50%;
+  z-index: 0;
+}
+
+.footer::after {
+  content: '';
+  position: absolute;
+  bottom: -20%;
+  left: -5%;
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, rgba(0, 201, 107, 0.3) 0%, transparent 70%);
+  border-radius: 50%;
+  z-index: 0;
+}
+
+.container {
+  max-width: 1300px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  z-index: 10;
+}
+
+.topSection {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4rem;
+  justify-content: space-between;
+  margin-bottom: 4rem;
+}
+
+.brand {
+  flex: 1;
+  min-width: 250px;
+  max-width: 320px;
+}
+
+.logo {
+  object-fit: contain;
+  margin-bottom: 1.5rem;
+  filter: brightness(0) invert(1);
+}
+
+.description {
+  font-size: 0.95rem;
+  line-height: 1.6;
+  opacity: 0.9;
+}
+
+.linksColumn {
+  flex: 1;
+  min-width: 200px;
+  display: flex;
+  flex-direction: column;
+}
+
+.columnTitle {
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+  color: white;
+}
+
+.linkList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.link {
+  color: rgba(255,255,255,0.8);
+  text-decoration: none;
+  transition: all 0.3s ease;
+  font-size: 0.95rem;
+}
+
+.link:hover {
+  opacity: 1;
+  color: var(--color-brand-green);
+  transform: translateX(3px);
+  display: inline-block;
+}
+
+.contactItem {
+  font-size: 0.95rem;
+  color: rgba(255,255,255,0.8);
+}
+
+.bottomSection {
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+  padding-top: 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.85rem;
+  color: rgba(255,255,255,0.7);
+}
+
+.socialLinks {
+  display: flex;
+  gap: 1rem;
+}
+
+.socialIcon {
+  color: rgba(255,255,255,0.8);
+  transition: all 0.3s ease;
+}
+
+.socialIcon:hover {
+  color: var(--color-brand-green);
+  transform: translateY(-2px);
+}
+
+@media (max-width: 992px) {
+  .topSection {
+    flex-direction: column;
+    gap: 3rem;
+  }
+  
+  .bottomSection {
+    flex-direction: column;
+    text-align: center;
+    gap: 1.5rem;
+  }
+}
