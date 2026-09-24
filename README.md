@@ -173,8 +173,21 @@ infocod-web/
 ### Prerrequisitos
 Asegúrate de tener instaladas las siguientes herramientas en tu entorno local:
 * **Node.js:** Versión `20.x` o superior recomendada ([Descargar Node.js](https://nodejs.org/)).
-* **npm:** Versión `10.x` o gestor alternativo compatible (`pnpm`, `yarn`, `bun`).
+* **Gestor de Paquetes Seguro (Recomendado):**
+  * ⚡ **pnpm** *(Altamente Recomendado)*: [Instalar pnpm](https://pnpm.io/installation)
+  * 🚀 **bun** *(Alternativa Ultra-rápida y Segura)*: [Instalar bun](https://bun.sh/)
+  * 🧶 **yarn** *(v4 / Berry)*: [Instalar yarn](https://yarnpkg.com/)
+  * 📦 **npm** *(Soportado, ver nota de seguridad abajo)*
 * **Git:** Para clonar el repositorio ([Descargar Git](https://git-scm.com/)).
+
+> [!IMPORTANT]
+> ### 🔒 Nota de Seguridad en Dependencias (Supply Chain & Malware Prevention)
+> En la industria moderna de software, el registro público de npm ha sufrido incidentes de paquetes maliciosos (*typosquatting*, inyecciones de scripts pre/postinstall y ataques a la cadena de suministro).
+> 
+> Por política de seguridad en **Infocod**, **recomendamos utilizar `pnpm` o `bun`** en lugar del instalador tradicional de npm:
+> - **pnpm** aísla el árbol de dependencias mediante un almacén direccionable por contenido (*content-addressable store*) y enlaces duros (*hard links*), bloqueando el acceso a paquetes no declarados (*phantom dependencies*) y previniendo la ejecución oculta de scripts arbitrarios.
+> - **bun** ofrece resolución hermética ultrarrápida con validación estricta de manifiesto.
+> - Si decides usar **npm**, te recomendamos ejecutar `npm audit` y considerar la bandera `--ignore-scripts` en entornos no controlados.
 
 ---
 
@@ -190,8 +203,18 @@ Asegúrate de tener instaladas las siguientes herramientas en tu entorno local:
    cd Infocodweb
    ```
 
-3. Instala las dependencias necesarias:
+3. Instala las dependencias con tu gestor preferido:
    ```bash
+   # Opción 1 (Recomendada por seguridad y aislamiento):
+   pnpm install
+
+   # Opción 2 (Ultra-rápido con Bun):
+   bun install
+
+   # Opción 3 (Yarn):
+   yarn install
+
+   # Opción 4 (npm tradicional):
    npm install
    ```
 
@@ -203,7 +226,10 @@ Asegúrate de tener instaladas las siguientes herramientas en tu entorno local:
 2. Descomprime el archivo `.zip` en tu carpeta de preferencia.
 3. Abre una terminal dentro de la carpeta descomprimida y ejecuta:
    ```bash
-   npm install
+   # Recomendado:
+   pnpm install
+   # O alternativamente:
+   bun install
    ```
 
 ---
@@ -236,16 +262,17 @@ UPSTASH_REDIS_REST_TOKEN=tu_upstash_token
 
 ## ⚡ Scripts Disponibles
 
-En el directorio del proyecto puedes ejecutar los siguientes comandos:
+Puedes ejecutar el proyecto con cualquiera de los gestores soportados:
 
-| Comando | Descripción |
-| :--- | :--- |
-| `npm run dev` | Inicia el servidor de desarrollo en `http://localhost:3000` con recarga rápida (*Fast Refresh*). |
-| `npm run build` | Compila y optimiza la aplicación para producción generando los bundles estáticos. |
-| `npm run start` | Inicia el servidor de producción tras haber ejecutado `npm run build`. |
-| `npm run lint` | Ejecuta ESLint para analizar el código en busca de errores sintácticos o de estilo. |
-| `npm test` | Ejecuta las pruebas unitarias con Vitest. |
-| `npm run test:e2e` | Ejecuta las pruebas completas de integración de extremo a extremo con Playwright. |
+| Tarea / Acción | `pnpm` *(Recomendado)* | `bun` | `npm` | Descripción |
+| :--- | :--- | :--- | :--- | :--- |
+| **Servidor de Desarrollo** | `pnpm dev` | `bun dev` | `npm run dev` | Inicia en `http://localhost:3000` con Fast Refresh. |
+| **Compilar para Producción** | `pnpm build` | `bun run build` | `npm run build` | Compila y optimiza la app generando bundles estáticos. |
+| **Iniciar en Producción** | `pnpm start` | `bun run start` | `npm run start` | Levanta el servidor Node de producción optimizado. |
+| **Análisis de Código (Lint)** | `pnpm lint` | `bun run lint` | `npm run lint` | Ejecuta ESLint para verificar calidad de sintaxis. |
+| **Pruebas Unitarias** | `pnpm test` | `bun test` | `npm test` | Ejecuta el test runner con Vitest. |
+| **Pruebas E2E** | `pnpm test:e2e` | `bun run test:e2e` | `npm run test:e2e` | Ejecuta pruebas completas de integración con Playwright. |
+
 
 ---
 
