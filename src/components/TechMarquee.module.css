@@ -1,0 +1,226 @@
+/* ============================================================
+   TechMarquee — B&W Minimalist, Awwwards-level
+   Two-row opposing marquees with outlined heading
+   ============================================================ */
+
+/* ── Section ── */
+.section {
+  position: relative;
+  padding: 3.5rem 0 2.5rem;
+  background-color: #fafafa;
+  overflow: hidden;
+}
+
+/* ── Top divider ── */
+.dividerLine {
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    #d4d4d4 20%,
+    #a3a3a3 50%,
+    #d4d4d4 80%,
+    transparent 100%
+  );
+  transform-origin: center;
+  margin-bottom: 2.5rem;
+}
+
+/* ── Header ── */
+.header {
+  text-align: center;
+  padding: 0 1.5rem;
+  margin-bottom: 2.5rem;
+}
+
+.heading {
+  font-family: var(--font-sora), sans-serif;
+  font-size: clamp(2rem, 4.5vw, 3.5rem);
+  font-weight: 800;
+  color: #0a0a0a;
+  line-height: 1.1;
+  letter-spacing: -0.04em;
+}
+
+.headingOutline {
+  color: transparent;
+  -webkit-text-stroke: 1.5px #0a0a0a;
+}
+
+/* ── Bottom note ── */
+.bottomNote {
+  text-align: center;
+  font-family: var(--font-jetbrains), monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: #a3a3a3;
+  margin-top: 1.8rem;
+  padding: 0 1.5rem;
+}
+
+/* ── Marquee wrapper ── */
+.marqueeWrapper {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  padding: 0.6rem 0;
+}
+
+/* Fade edges */
+.fadeLeft,
+.fadeRight {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 120px;
+  z-index: 10;
+  pointer-events: none;
+}
+
+.fadeLeft {
+  left: 0;
+  background: linear-gradient(to right, #fafafa 0%, transparent 100%);
+}
+
+.fadeRight {
+  right: 0;
+  background: linear-gradient(to left, #fafafa 0%, transparent 100%);
+}
+
+/* ── Marquee track ── */
+.marqueeTrack {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  white-space: nowrap;
+  width: max-content;
+}
+
+.marqueeTrack[data-direction="ltr"] {
+  animation: scrollLTR 35s linear infinite;
+}
+
+.marqueeTrack[data-direction="rtl"] {
+  animation: scrollRTL 35s linear infinite;
+}
+
+@keyframes scrollLTR {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+@keyframes scrollRTL {
+  0%   { transform: translateX(-50%); }
+  100% { transform: translateX(0); }
+}
+
+/* ── Individual tech items ── */
+.techItem {
+  display: inline-flex;
+  align-items: center;
+  font-family: var(--font-sora), sans-serif;
+  font-size: clamp(1.1rem, 2.2vw, 1.6rem);
+  font-weight: 700;
+  color: #0a0a0a;
+  padding: 0 1.8rem;
+  white-space: nowrap;
+  position: relative;
+  transition: color 0.3s ease, opacity 0.3s ease;
+  cursor: default;
+  letter-spacing: -0.02em;
+}
+
+/* Separator dot between items */
+.techItem::after {
+  content: '';
+  display: inline-block;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #d4d4d4;
+  margin-left: 1.8rem;
+  flex-shrink: 0;
+}
+
+/* Hover: items around cursor dim, hovered one stays bold */
+.techItem:hover {
+  color: #0a0a0a;
+  opacity: 1;
+}
+
+.marqueeTrack:hover .techItem {
+  opacity: 0.2;
+}
+
+.marqueeTrack:hover .techItem:hover {
+  opacity: 1;
+}
+
+/* ── Bottom accent row ── */
+.bottomRow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  margin-top: 2rem;
+  padding: 0 1.5rem;
+}
+
+.counter {
+  font-family: var(--font-jetbrains), monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #a3a3a3;
+  white-space: nowrap;
+}
+
+.bottomLine {
+  width: 60px;
+  height: 1px;
+  background: #d4d4d4;
+}
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+  .section {
+    padding: 2.5rem 0 2rem;
+  }
+
+  .heading {
+    font-size: clamp(1.6rem, 6vw, 2.4rem);
+  }
+
+  .headingOutline {
+    -webkit-text-stroke-width: 1px;
+  }
+
+  .techItem {
+    font-size: clamp(0.9rem, 3.5vw, 1.2rem);
+    padding: 0 1rem;
+  }
+
+  .techItem::after {
+    width: 4px;
+    height: 4px;
+    margin-left: 1rem;
+  }
+
+  .fadeLeft,
+  .fadeRight {
+    width: 60px;
+  }
+}
+
+@media (max-width: 480px) {
+  .bottomRow {
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+
+  .bottomLine {
+    display: none;
+  }
+}

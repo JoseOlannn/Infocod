@@ -177,6 +177,72 @@
   display: none;
 }
 
+/* ================================
+   FINAL CTA CARD STYLES
+   ================================ */
+.ctaCardWrapper {
+  border-right: none;
+  background: linear-gradient(to bottom, #1a0b2e, #0d0517);
+}
+
+.ctaCardWrapper.active {
+  justify-content: center;
+  align-items: center;
+}
+
+.ctaCardWrapper:not(.active):hover {
+  box-shadow: inset 0 0 0 2px var(--color-brand-blue), 0 0 15px rgba(79, 142, 247, 0.4);
+}
+
+.ctaContent {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+.ctaTitle {
+  font-family: var(--font-sora), sans-serif;
+  font-size: clamp(1.8rem, 3vw, 2.8rem);
+  font-weight: 800;
+  color: white;
+  margin-bottom: 15px;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+
+.ctaDesc {
+  font-family: var(--font-manrope), sans-serif;
+  font-size: 1.1rem;
+  color: rgba(255,255,255,0.7);
+  max-width: 400px;
+  margin: 0 auto 30px;
+  line-height: 1.5;
+}
+
+.ctaBtn {
+  display: inline-block;
+  padding: 14px 35px;
+  background-color: white;
+  color: #000;
+  border-radius: 50px; /* Pastilla clean */
+  font-family: var(--font-jetbrains), monospace;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  text-decoration: none;
+  font-size: 0.95rem;
+  transition: all 0.3s ease;
+}
+
+.ctaBtn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 10px 25px rgba(255,255,255,0.2);
+}
+
+
 /* RESPONSIVE: MÓVILES (Acordeón Vertical) */
 @media (max-width: 768px) {
   .accordionContainer {
@@ -236,5 +302,13 @@
   
   .desc {
     font-size: 1rem;
+  }
+
+  .ctaCardWrapper.active {
+    padding: 20px;
+  }
+  
+  .ctaTitle {
+    font-size: 1.6rem;
   }
 }

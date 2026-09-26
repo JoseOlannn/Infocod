@@ -1,0 +1,243 @@
+﻿/* ==========================================================
+   LaptopIntro — CSS Module
+   Scroll-driven laptop-open → hero reveal animation
+   ========================================================== */
+
+/* ── Outer scroll-pin container ── */
+.wrapper {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  background-color: #ffffff;
+}
+
+/* ── Sticky stage that fills the viewport while pinned ── */
+.stage {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background-color: #ffffff;
+}
+
+/* ─────────────────────────────────────────────
+   LAPTOP SCENE
+   ───────────────────────────────────────────── */
+.laptopScene {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  perspective: 1200px;
+  perspective-origin: 50% 60%;
+}
+
+.laptopSvgWrapper {
+  position: relative;
+  width: min(520px, 80vw);
+  aspect-ratio: 16 / 11;
+}
+
+.laptopBase {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.laptopLid {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 60%;
+  transform-origin: 50% 100%;
+  transform: rotateX(-100deg);
+  transform-style: preserve-3d;
+}
+
+.laptopLidSvg {
+  width: 100%;
+  height: 100%;
+  display: block;
+  backface-visibility: hidden;
+}
+
+/* ─────────────────────────────────────────────
+   SCREEN OVERLAY
+   ───────────────────────────────────────────── */
+.screenOverlay {
+  position: absolute;
+  top: calc(60% * 6% + 0%);
+  left: 8.5%;
+  width: 83%;
+  height: calc(60% * 80%);
+  background-color: #0a0a0a;
+  border-radius: 4px;
+  opacity: 0;
+  transform-origin: 50% 50%;
+  z-index: 5;
+  pointer-events: none;
+}
+
+/* ─────────────────────────────────────────────
+   INTRO TEXT
+   ───────────────────────────────────────────── */
+.introTextLayer {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding-bottom: 10vh;
+  z-index: 10;
+  pointer-events: none;
+}
+
+.introLogo {
+  font-family: var(--font-sora), sans-serif;
+  font-size: clamp(3.5rem, 9vw, 7rem);
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  line-height: 1;
+  margin-bottom: 1rem;
+  background: linear-gradient(135deg, #0f172a 0%, #475569 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.introSubtitle {
+  font-family: var(--font-manrope), sans-serif;
+  font-size: clamp(0.85rem, 1.6vw, 1.1rem);
+  color: #64748b;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
+/* ─────────────────────────────────────────────
+   SCROLL HINT
+   ───────────────────────────────────────────── */
+.scrollHint {
+  position: absolute;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4rem;
+  z-index: 15;
+  animation: bounceDown 2s ease-in-out infinite;
+}
+
+.scrollHintText {
+  font-family: var(--font-jetbrains), monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.2em;
+  color: #94a3b8;
+  text-transform: uppercase;
+}
+
+.scrollHintArrow {
+  width: 20px;
+  height: 20px;
+  border-right: 2px solid #94a3b8;
+  border-bottom: 2px solid #94a3b8;
+  transform: rotate(45deg);
+}
+
+@keyframes bounceDown {
+  0%, 100% { transform: translateX(-50%) translateY(0); opacity: 0.7; }
+  50%       { transform: translateX(-50%) translateY(8px); opacity: 1; }
+}
+
+/* ─────────────────────────────────────────────
+   REAL HERO
+   ───────────────────────────────────────────── */
+.realHero {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background-color: #ffffff;
+}
+
+.heroContent {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  max-width: 900px;
+  padding: 0 2rem;
+  gap: 1.5rem;
+}
+
+.heroTitle {
+  font-family: var(--font-sora), sans-serif;
+  font-size: clamp(4rem, 10vw, 8rem);
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.04em;
+}
+
+.titleInfo { color: #000000; }
+.titleCod  { color: #888888; }
+
+.heroSubtitle {
+  font-family: var(--font-manrope), sans-serif;
+  font-size: 1.25rem;
+  color: #555555;
+  font-weight: 500;
+  line-height: 1.6;
+  max-width: 600px;
+  height: 60px;
+}
+
+.heroCtaGroup {
+  display: flex;
+  gap: 1.5rem;
+  margin-top: 1.5rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.cyberGridWrapper {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+/* ─────────────────────────────────────────────
+   WHITE FLASH OVERLAY
+   ───────────────────────────────────────────── */
+.whiteFlash {
+  position: absolute;
+  inset: 0;
+  background-color: #ffffff;
+  z-index: 50;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* ─────────────────────────────────────────────
+   RESPONSIVE
+   ───────────────────────────────────────────── */
+@media (max-width: 640px) {
+  .laptopSvgWrapper { width: 92vw; }
+  .introLogo { font-size: clamp(2.8rem, 15vw, 5rem); }
+  .heroCtaGroup { flex-direction: column; align-items: center; }
+}

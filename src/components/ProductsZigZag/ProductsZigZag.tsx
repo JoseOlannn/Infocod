@@ -64,6 +64,19 @@ export default function ProductsZigZag() {
       const track = trackRef.current;
       const numCards = products.length;
 
+      // Animación de entrada "Reveal" (se sube)
+      gsap.from(sectionRef.current, {
+        y: 150,
+        opacity: 0,
+        duration: 1,
+        ease: "power3.out",
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: "top 90%",
+          toggleActions: "play none none none"
+        }
+      });
+
       // Pin de la sección y animación de desplazamiento horizontal
       ScrollTrigger.create({
         id: "products-pin",

@@ -1,68 +1,104 @@
-import { Code2, Database, Terminal, Cloud, Cpu, Layers } from "lucide-react";
+"use client";
 
-const technologies = [
-  { name: "Next.js", icon: Code2, color: "#ffffff" },
-  { name: "React", icon: Code2, color: "#61dafb" },
-  { name: "Node.js", icon: Terminal, color: "#68a063" },
-  { name: "Python", icon: Terminal, color: "#3776ab" },
-  { name: "Java", icon: Cpu, color: "#f89820" },
-  { name: "PostgreSQL", icon: Database, color: "#4169e1" },
-  { name: "Supabase", icon: Database, color: "#3ecf8e" },
-  { name: "AWS", icon: Cloud, color: "#ff9900" },
-  { name: "TypeScript", icon: Code2, color: "#3178c6" },
-  { name: "TailwindCSS", icon: Layers, color: "#38bdf8" },
+import { useEffect, useRef } from "react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import styles from "./TechMarquee.module.css";
+
+if (typeof window !== "undefined") {
+  gsap.registerPlugin(ScrollTrigger);
+}
+
+/* ── Tech stack entries — clean monochrome ── */
+const TECH = [
+  "Next.js",
+  "React",
+  "Node.js",
+  "Python",
+  "Java",
+  "PostgreSQL",
+  "Supabase",
+  "AWS",
+  "TypeScript",
+  "TailwindCSS",
+  "Docker",
+  "GraphQL",
 ];
 
 export default function TechMarqueeSection() {
+  const sectionRef  = useRef<HTMLElement>(null);
+  const headingRef  = useRef<HTMLHeadingElement>(null);
+  const lineRef     = useRef<HTMLDivElement>(null);
+  const bottomRef   = useRef<HTMLParagraphElement>(null);
+
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      gsap.set(headingRef.current, { opacity: 0, y: 40 });
+      gsap.set(lineRef.current, { scaleX: 0 });
+      gsap.set(bottomRef.current, { opacity: 0, y: 12 });
+
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: "top 82%",
+          toggleActions: "play none none none",
+        },
+      });
+
+      tl.to(lineRef.current, { scaleX: 1, duration: 0.8, ease: "power3.inOut" })
+        .to(headingRef.current, { opacity: 1, y: 0, duration: 0.7, ease: "power3.out" }, "-=0.4")
+        .to(bottomRef.current, { opacity: 1, y: 0, duration: 0.5, ease: "power3.out" }, "-=0.2");
+    }, sectionRef);
+
+    return () => ctx.revert();
+  }, []);
+
   return (
-    <section className="pt-6 pb-12 bg-gradient-to-b from-[#050505] via-[#0f0720] to-[#1a0b2e] overflow-hidden relative">
-      
-      {/* Glow Ambient Blur behind */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[250px] bg-purple-600/10 blur-[100px] pointer-events-none rounded-full" />
+    <section ref={sectionRef} className={styles.section}>
+      {/* ── Top divider line ── */}
+      <div ref={lineRef} className={styles.dividerLine} />
 
-      {/* Header */}
-      <div className="text-center mb-8 px-6 relative z-10">
-
-        <h2 className="text-3xl md:text-4xl font-sora font-extrabold mb-3 text-white tracking-tight">
-          Nos adaptamos a tus tecnologías
+      {/* ── Heading ── */}
+      <div className={styles.header}>
+        <h2 ref={headingRef} className={styles.heading}>
+          Construimos con las
+          <br />
+          <span className={styles.headingOutline}>mejores herramientas</span>
         </h2>
-        <p className="text-slate-400 font-manrope max-w-xl mx-auto text-sm md:text-base leading-relaxed">
-          Dominamos el stack tecnológico moderno para construir soluciones rápidas, seguras y altamente escalables.
-        </p>
       </div>
 
-      {/* Marquee with Left & Right Gradient Fades */}
-      <div className="relative w-full overflow-hidden flex z-10">
-        
-        {/* Left Fade Overlay */}
-        <div className="pointer-events-none absolute top-0 bottom-0 left-0 w-28 bg-gradient-to-r from-[#090514] to-transparent z-20" />
-        
-        {/* Right Fade Overlay */}
-        <div className="pointer-events-none absolute top-0 bottom-0 right-0 w-28 bg-gradient-to-l from-[#1a0b2e] to-transparent z-20" />
+      {/* ── Marquee row 1 (left to right) ── */}
+      <div className={styles.marqueeWrapper}>
+        <div className={styles.fadeLeft} />
+        <div className={styles.fadeRight} />
 
-        <div className="flex gap-6 items-center whitespace-nowrap animate-marquee">
-          {/* Loop 1 */}
-          {technologies.map((tech, idx) => (
-            <div 
-              key={`tech1-${idx}`} 
-              className="inline-flex items-center gap-3 px-6 py-3.5 rounded-2xl bg-white/[0.04] backdrop-blur-xl border border-white/10 hover:border-[#4F8EF7]/50 hover:bg-white/[0.08] transition-all duration-300 shadow-xl shadow-black/40 group cursor-default"
-            >
-              <tech.icon className="w-5 h-5 transition-transform duration-300 group-hover:scale-110" style={{ color: tech.color }} />
-              <span className="font-sora font-bold text-white/90 text-sm tracking-wide">{tech.name}</span>
-            </div>
-          ))}
-          {/* Loop 2 */}
-          {technologies.map((tech, idx) => (
-            <div 
-              key={`tech2-${idx}`} 
-              className="inline-flex items-center gap-3 px-6 py-3.5 rounded-2xl bg-white/[0.04] backdrop-blur-xl border border-white/10 hover:border-[#4F8EF7]/50 hover:bg-white/[0.08] transition-all duration-300 shadow-xl shadow-black/40 group cursor-default"
-            >
-              <tech.icon className="w-5 h-5 transition-transform duration-300 group-hover:scale-110" style={{ color: tech.color }} />
-              <span className="font-sora font-bold text-white/90 text-sm tracking-wide">{tech.name}</span>
-            </div>
+        <div className={styles.marqueeTrack} data-direction="ltr">
+          {[...TECH, ...TECH].map((name, i) => (
+            <span key={`a-${i}`} className={styles.techItem}>
+              {name}
+            </span>
           ))}
         </div>
       </div>
+
+      {/* ── Marquee row 2 (right to left, offset) ── */}
+      <div className={styles.marqueeWrapper}>
+        <div className={styles.fadeLeft} />
+        <div className={styles.fadeRight} />
+
+        <div className={styles.marqueeTrack} data-direction="rtl">
+          {[...TECH.slice(6), ...TECH, ...TECH.slice(0, 6)].map((name, i) => (
+            <span key={`b-${i}`} className={styles.techItem}>
+              {name}
+            </span>
+          ))}
+        </div>
+      </div>
+
+      {/* ── Bottom small text ── */}
+      <p ref={bottomRef} className={styles.bottomNote}>
+        Siempre estamos actualizando nuestro stack para tu imaginación
+      </p>
     </section>
   );
 }
