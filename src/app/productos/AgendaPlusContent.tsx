@@ -132,7 +132,7 @@ export default function AgendaPlusContent({ active, isTransitioning }: { active:
   useEffect(() => {
     if (isTransitioning) return;
     const ctx = gsap.context(() => {
-      const path = document.getElementById('snakePathActive') as SVGPathElement;
+      const path = document.getElementById('snakePathActive') as unknown as SVGPathElement | null;
       if (!path) return;
       
       const length = path.getTotalLength();
