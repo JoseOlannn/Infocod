@@ -24,24 +24,38 @@ function getRateLimiter() {
   }
 }
 
+function cleanEnv(value?: string): string {
+  if (!value) return '';
+  return value.trim().replace(/^["']|["']$/g, '').trim();
+}
+
 function createSmtpTransporter() {
-  const host = process.env.SMTP_HOST?.trim() || 'smtp.gmail.com';
-  const port = Number(process.env.SMTP_PORT) || 465;
-  const secure = port === 465;
-  const user = process.env.SMTP_USER?.trim();
-  const pass = process.env.SMTP_PASS?.replace(/\s+/g, '');
+  const host = cleanEnv(process.env.SMTP_HOST) || 'smtp.gmail.com';
+  const port = Number(cleanEnv(process.env.SMTP_PORT)) || 465;
+  const user = cleanEnv(process.env.SMTP_USER);
+  const pass = cleanEnv(process.env.SMTP_PASS).replace(/\s+/g, '');
 
   if (!user || !pass) return null;
 
-  const transporter = nodemailer.createTransport({
-    host,
-    port,
-    secure,
-    auth: {
-      user,
-      pass,
-    },
-  });
+  const isGmail = host.toLowerCase().includes('gmail.com') || host.toLowerCase().includes('googlemail.com');
+
+  const transporter = isGmail
+    ? nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+          user,
+          pass,
+        },
+      })
+    : nodemailer.createTransport({
+        host,
+        port,
+        secure: port === 465,
+        auth: {
+          user,
+          pass,
+        },
+      });
 
   return { user, transporter };
 }
@@ -216,8 +230,8 @@ export async function sendContactEmail(formData: FormData) {
     }
 
     const targetEmail =
-      process.env.CONTACT_EMAIL ||
-      process.env.CONTACT_EMAIL_TO ||
+      cleanEnv(process.env.CONTACT_EMAIL) ||
+      cleanEnv(process.env.CONTACT_EMAIL_TO) ||
       'infocod.codes@gmail.com';
 
     const emailHtml = generateContactHtml({
@@ -250,11 +264,16 @@ ${validatedData.message}`;
         html: emailHtml,
         text: emailText,
       });
-    } catch (smtpError) {
+    } catch (smtpError: any) {
       console.error('SMTP Send Error:', smtpError);
+      const isAuthError = smtpError?.code === 'EAUTH' || smtpError?.responseCode === 535;
+      const detail = isAuthError 
+        ? 'Error de autenticación con Gmail. Verifica que SMTP_USER y SMTP_PASS estén bien configurados en Vercel.' 
+        : (smtpError?.message || 'Error de conexión con el servidor de correo.');
+
       return {
         success: false,
-        error: 'No se pudo enviar el mensaje en este momento. Por favor intenta más tarde o escríbenos a infocod.codes@gmail.com.',
+        error: `No se pudo enviar el correo (${detail}). Escríbenos directamente a infocod.codes@gmail.com.`,
       };
     }
 
