@@ -76,7 +76,7 @@ export default function Footer() {
           <div className={styles.linksColumn}>
             <h4 className={styles.columnTitle}>Contacto</h4>
             <ul className={styles.linkList}>
-              <li className={styles.contactItem}>xxxx@infocod.com</li>
+              <li className={styles.contactItem}><a href="mailto:infocod.codes@gmail.com" className={styles.link}>infocod.codes@gmail.com</a></li>
               <li className={styles.contactItem}>+52 xx xxxx xxxx</li>
               <li className={styles.contactItem}>xxxx, xxxx</li>
               <li><Link href="/contacto" className={styles.link} style={{ color: 'var(--color-brand-green)', fontWeight: 'bold' }}>Cotiza tu proyecto &rarr;</Link></li>

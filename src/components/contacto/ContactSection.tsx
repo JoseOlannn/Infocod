@@ -114,7 +114,7 @@ export default function ContactSection() {
             <div className={`${styles.infoList} anim-up`}>
               <div className={styles.infoItem}>
                 <span className={styles.infoLabel}>Escríbenos</span>
-                <a href="mailto:hola@infocod.com" className={styles.infoValue}>hola@infocod.com</a>
+                <a href="mailto:infocod.codes@gmail.com" className={styles.infoValue}>infocod.codes@gmail.com</a>
               </div>
               <div className={styles.infoItem}>
                 <span className={styles.infoLabel}>Llámanos</span>

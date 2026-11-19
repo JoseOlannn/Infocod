@@ -14,20 +14,45 @@ import {
 interface ContactEmailProps {
   name: string;
   email: string;
+  phone?: string;
+  company?: string;
+  service?: string;
   message: string;
 }
 
-export default function ContactEmail({ name, email, message }: ContactEmailProps) {
+export default function ContactEmail({
+  name,
+  email,
+  phone,
+  company,
+  service,
+  message,
+}: ContactEmailProps) {
   return (
     <Html>
       <Head />
-      <Preview>Nuevo mensaje de contacto desde Infocod</Preview>
+      <Preview>Nuevo mensaje de contacto de {name} - Infocod</Preview>
       <Body style={main}>
         <Container style={container}>
           <Heading style={h1}>Nuevo Lead: {name}</Heading>
           <Text style={text}>
             <strong>Correo:</strong> {email}
           </Text>
+          {phone && phone !== 'No proporcionado' && (
+            <Text style={text}>
+              <strong>Teléfono:</strong> {phone}
+            </Text>
+          )}
+          {company && company !== 'No especificada' && (
+            <Text style={text}>
+              <strong>Empresa:</strong> {company}
+            </Text>
+          )}
+          {service && service !== 'General' && (
+            <Text style={text}>
+              <strong>Servicio de interés:</strong> {service}
+            </Text>
+          )}
           <Hr style={hr} />
           <Section>
             <Text style={text}>
@@ -37,7 +62,7 @@ export default function ContactEmail({ name, email, message }: ContactEmailProps
           </Section>
           <Hr style={hr} />
           <Text style={footer}>
-            Este correo fue enviado desde el formulario de contacto de Infocod.
+            Este correo fue enviado desde el formulario de contacto de Infocod para infocod.codes@gmail.com.
           </Text>
         </Container>
       </Body>
