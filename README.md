@@ -57,7 +57,7 @@ El proyecto está diseñado bajo los estándares más exigentes de la industria 
 * 🌐 **Hero Interactivo CyberGrid:** Fondo procedural de malla tridimensional generado dinámicamente con Canvas 2D, que responde en tiempo real a las coordenadas del cursor del usuario mediante física magnética.
 * 🌀 **Animaciones Cinematográficas (GSAP + ScrollTrigger):** Transiciones con difuminado (*blur*), zoom adaptativo, desplazamiento de capas en cascada y texto tipo *Scramble* que decodifica caracteres dinámicamente.
 * 🛡️ **Blindaje de Código Frontend:** Módulo `SecurityRules` integrado para prevención avanzada de inspección superficial, deshabilitación de selección arbitraria de textos y control de descarga no autorizada de assets.
-* 📬 **Sistema de Contacto y Cotización Transaccional:** Integración con backend de correos automáticos usando **Resend** y `@react-email/components`, validación estricta con **Zod** y **React Hook Form**.
+* 📬 **Sistema de Contacto y Cotización Transaccional:** Integración con backend de correos automáticos vía **SMTP (Nodemailer + Gmail)**, validación estricta con **Zod** y **React Hook Form**.
 * ⚡ **Limitador de Tasa (Rate Limiting):** Protección anti-abuso y prevención de spam mediante **Upstash Redis** (`@upstash/ratelimit`).
 * 🔒 **Autenticación y Persistencia con Supabase:** Integración SSR mediante `@supabase/ssr` con políticas de seguridad de nivel de fila (Row-Level Security / RLS).
 
@@ -108,7 +108,7 @@ El catálogo de servicios de Infocod cubre 9 áreas fundamentales de tecnología
 
 ### Backend, Estado & Servicios
 * **Base de Datos & Auth:** [Supabase](https://supabase.com/) (`@supabase/supabase-js`, `@supabase/ssr`)
-* **Correos Transaccionales:** [Resend](https://resend.com/) + `@react-email/components`
+* **Correos Transaccionales:** [Nodemailer](https://nodemailer.com/) (SMTP de Gmail)
 * **Rate Limiting & Caché:** [Upstash Redis](https://upstash.com/) (`@upstash/ratelimit`, `@upstash/redis`)
 * **Gestión de Estado:** [Zustand 5](https://github.com/pmndrs/zustand)
 * **Formularios & Validación:** [React Hook Form](https://react-hook-form.com/) + [Zod](https://zod.dev/)
@@ -246,10 +246,13 @@ NEXT_PUBLIC_SUPABASE_URL=https://tu-proyecto.supabase.co
 NEXT_PUBLIC_SUPABASE_ANON_KEY=tu_supabase_anon_key
 
 # ========================================================
-# RESEND (Servicio de Envío de Correos Transaccionales)
+# SERVIDOR DE CORREOS (Nodemailer + Gmail SMTP)
 # ========================================================
-RESEND_API_KEY=re_123456789abcdef
-CONTACT_EMAIL_TO=contacto@infocod.codes
+SMTP_HOST="smtp.gmail.com"
+SMTP_PORT="465"
+SMTP_USER="infocod.codes@gmail.com"
+SMTP_PASS="tu_contraseña_de_aplicacion"
+CONTACT_EMAIL="infocod.codes@gmail.com"
 
 # ========================================================
 # UPSTASH REDIS (Rate Limiting y Prevención de Abuso)

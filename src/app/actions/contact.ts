@@ -1,6 +1,6 @@
 'use server';
 
-import { Resend } from 'resend';
+import nodemailer from 'nodemailer';
 import { z } from 'zod';
 import { headers } from 'next/headers';
 import { Ratelimit } from '@upstash/ratelimit';
@@ -24,15 +24,35 @@ function getRateLimiter() {
   }
 }
 
-function getResendClient() {
-  const apiKey = process.env.RESEND_API_KEY;
-  if (!apiKey) return null;
-  try {
-    return new Resend(apiKey);
-  } catch (err) {
-    console.warn('[RESEND] Advertencia al inicializar Resend:', err);
-    return null;
-  }
+function createSmtpTransporter() {
+  const host = process.env.SMTP_HOST?.trim() || 'smtp.gmail.com';
+  const port = Number(process.env.SMTP_PORT) || 465;
+  const secure = port === 465;
+  const user = process.env.SMTP_USER?.trim();
+  const pass = process.env.SMTP_PASS?.replace(/\s+/g, '');
+
+  if (!user || !pass) return null;
+
+  const transporter = nodemailer.createTransport({
+    host,
+    port,
+    secure,
+    auth: {
+      user,
+      pass,
+    },
+  });
+
+  return { user, transporter };
+}
+
+function escapeHtml(value: string): string {
+  return value
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
 }
 
 function generateContactHtml({
@@ -50,6 +70,13 @@ function generateContactHtml({
   service?: string;
   message: string;
 }) {
+  const safeName = escapeHtml(name);
+  const safeEmail = escapeHtml(email);
+  const safePhone = phone ? escapeHtml(phone) : '';
+  const safeCompany = company ? escapeHtml(company) : '';
+  const safeService = service ? escapeHtml(service) : '';
+  const safeMessage = escapeHtml(message);
+
   return `<!DOCTYPE html>
 <html>
 <head>
@@ -67,32 +94,32 @@ function generateContactHtml({
       <table style="width: 100%; border-collapse: collapse; margin-bottom: 24px;">
         <tr>
           <td style="padding: 8px 0; color: #64748b; font-size: 14px; width: 140px; font-weight: 600;">Nombre:</td>
-          <td style="padding: 8px 0; color: #0f172a; font-size: 15px; font-weight: 600;">${name}</td>
+          <td style="padding: 8px 0; color: #0f172a; font-size: 15px; font-weight: 600;">${safeName}</td>
         </tr>
         <tr>
           <td style="padding: 8px 0; color: #64748b; font-size: 14px; font-weight: 600;">Correo:</td>
-          <td style="padding: 8px 0; color: #4F8EF7; font-size: 15px; font-weight: 600;"><a href="mailto:${email}" style="color: #4F8EF7; text-decoration: none;">${email}</a></td>
+          <td style="padding: 8px 0; color: #4F8EF7; font-size: 15px; font-weight: 600;"><a href="mailto:${safeEmail}" style="color: #4F8EF7; text-decoration: none;">${safeEmail}</a></td>
         </tr>
-        ${phone && phone !== 'No proporcionado' ? `
+        ${safePhone && phone !== 'No proporcionado' ? `
         <tr>
           <td style="padding: 8px 0; color: #64748b; font-size: 14px; font-weight: 600;">Teléfono:</td>
-          <td style="padding: 8px 0; color: #0f172a; font-size: 15px;"><a href="tel:${phone}" style="color: #0f172a; text-decoration: none;">${phone}</a></td>
+          <td style="padding: 8px 0; color: #0f172a; font-size: 15px;"><a href="tel:${safePhone}" style="color: #0f172a; text-decoration: none;">${safePhone}</a></td>
         </tr>` : ''}
-        ${company && company !== 'No especificada' ? `
+        ${safeCompany && company !== 'No especificada' ? `
         <tr>
           <td style="padding: 8px 0; color: #64748b; font-size: 14px; font-weight: 600;">Empresa:</td>
-          <td style="padding: 8px 0; color: #0f172a; font-size: 15px;">${company}</td>
+          <td style="padding: 8px 0; color: #0f172a; font-size: 15px;">${safeCompany}</td>
         </tr>` : ''}
-        ${service && service !== 'General' ? `
+        ${safeService && service !== 'General' ? `
         <tr>
           <td style="padding: 8px 0; color: #64748b; font-size: 14px; font-weight: 600;">Servicio:</td>
-          <td style="padding: 8px 0; color: #0f172a; font-size: 15px;">${service}</td>
+          <td style="padding: 8px 0; color: #0f172a; font-size: 15px;">${safeService}</td>
         </tr>` : ''}
       </table>
       
       <div style="border-top: 1px solid #e2e8f0; padding-top: 20px;">
         <p style="color: #64748b; font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; margin: 0 0 10px;">Mensaje del cliente:</p>
-        <div style="background-color: #f8fafc; border-left: 4px solid #4F8EF7; padding: 16px 20px; border-radius: 4px; color: #1e293b; font-size: 15px; line-height: 1.6; white-space: pre-wrap;">${message}</div>
+        <div style="background-color: #f8fafc; border-left: 4px solid #4F8EF7; padding: 16px 20px; border-radius: 4px; color: #1e293b; font-size: 15px; line-height: 1.6; white-space: pre-wrap;">${safeMessage}</div>
       </div>
     </div>
     
@@ -147,7 +174,14 @@ export async function sendContactEmail(formData: FormData) {
     };
 
     // 3. Validación estricta con Zod
-    const validatedData = contactSchema.parse(rawData);
+    const parsed = contactSchema.safeParse(rawData);
+    if (!parsed.success) {
+      return {
+        success: false,
+        error: parsed.error.issues[0]?.message || 'Por favor revisa los datos del formulario.',
+      };
+    }
+    const validatedData = parsed.data;
 
     // 4. Guardar en Base de Datos (Supabase si las credenciales están configuradas)
     if (process.env.NEXT_PUBLIC_SUPABASE_URL && (process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY)) {
@@ -171,18 +205,20 @@ export async function sendContactEmail(formData: FormData) {
       }
     }
 
-    // 5. Envío de correo a la bandeja de Infocod
-    const targetEmail = process.env.CONTACT_EMAIL || 'infocod.codes@gmail.com';
-    const fromAddress = process.env.RESEND_FROM_EMAIL || 'Infocod Contacto <onboarding@resend.dev>';
-
-    const resend = getResendClient();
-    if (!resend) {
-      console.warn('RESEND_API_KEY no está configurada.');
+    // 5. Envío de correo vía SMTP (Gmail / Nodemailer)
+    const smtp = createSmtpTransporter();
+    if (!smtp) {
+      console.warn('Configuración SMTP incompleta: faltan SMTP_USER y SMTP_PASS.');
       return { 
         success: false, 
-        error: 'El servicio de correo requiere la variable RESEND_API_KEY en Vercel. Por favor agrégala en la configuración del proyecto o contáctanos a infocod.codes@gmail.com.' 
+        error: 'El servidor de correos SMTP no está configurado (faltan SMTP_USER y SMTP_PASS en las variables de entorno). Escríbenos directamente a infocod.codes@gmail.com.' 
       };
     }
+
+    const targetEmail =
+      process.env.CONTACT_EMAIL ||
+      process.env.CONTACT_EMAIL_TO ||
+      'infocod.codes@gmail.com';
 
     const emailHtml = generateContactHtml({
       name: validatedData.name,
@@ -203,29 +239,31 @@ Servicio: ${validatedData.service || 'General'}
 Mensaje:
 ${validatedData.message}`;
 
-    const { error } = await resend.emails.send({
-      from: fromAddress,
-      to: [targetEmail],
-      replyTo: validatedData.email,
-      subject: `Nuevo mensaje de ${validatedData.name} - Infocod`,
-      html: emailHtml,
-      text: emailText,
-    });
+    const cleanSubjectName = validatedData.name.replace(/[\r\n]+/g, ' ').trim();
 
-    if (error) {
-      console.error('Resend Error:', error);
-      return { 
-        success: false, 
-        error: error.message || 'Hubo un error al enviar el correo. Por favor contáctanos directamente a infocod.codes@gmail.com.' 
+    try {
+      await smtp.transporter.sendMail({
+        from: `"Infocod Contacto" <${smtp.user}>`,
+        to: targetEmail,
+        replyTo: validatedData.email,
+        subject: `Nuevo mensaje de ${cleanSubjectName} - Infocod`,
+        html: emailHtml,
+        text: emailText,
+      });
+    } catch (smtpError) {
+      console.error('SMTP Send Error:', smtpError);
+      return {
+        success: false,
+        error: 'No se pudo enviar el mensaje en este momento. Por favor intenta más tarde o escríbenos a infocod.codes@gmail.com.',
       };
     }
 
     return { success: true };
-  } catch (error: any) {
+  } catch (error) {
     console.error('Validation or Server Error:', error);
     return { 
       success: false, 
-      error: error?.message || 'Datos inválidos o error interno en el servidor.' 
+      error: 'Datos inválidos o error interno en el servidor.' 
     };
   }
 }

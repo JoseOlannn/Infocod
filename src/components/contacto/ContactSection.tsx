@@ -48,6 +48,14 @@ export default function ContactSection() {
 
   const { register, control, handleSubmit, formState: { errors, isSubmitting }, reset } = useForm<ContactFormData>({
     resolver: zodResolver(contactSchema),
+    defaultValues: {
+      name: '',
+      email: '',
+      phone: '',
+      company: '',
+      service: '',
+      message: '',
+    },
   });
 
   const onSubmit = async (data: ContactFormData) => {
