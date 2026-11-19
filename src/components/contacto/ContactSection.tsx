@@ -52,23 +52,30 @@ export default function ContactSection() {
 
   const onSubmit = async (data: ContactFormData) => {
     setSubmitStatus('idle');
-    const formData = new FormData();
-    formData.append('name', data.name);
-    formData.append('email', data.email);
-    formData.append('phone', data.phone);
-    if (data.company) formData.append('company', data.company);
-    formData.append('service', data.service);
-    formData.append('message', data.message);
+    setErrorMessage('');
+    try {
+      const formData = new FormData();
+      formData.append('name', data.name);
+      formData.append('email', data.email);
+      formData.append('phone', data.phone || '');
+      if (data.company) formData.append('company', data.company);
+      formData.append('service', data.service || '');
+      formData.append('message', data.message);
 
-    const result = await sendContactEmail(formData);
+      const result = await sendContactEmail(formData);
 
-    if (result.success) {
-      setSubmitStatus('success');
-      reset();
-      setTimeout(() => setSubmitStatus('idle'), 5000);
-    } else {
+      if (result && result.success) {
+        setSubmitStatus('success');
+        reset();
+        setTimeout(() => setSubmitStatus('idle'), 6000);
+      } else {
+        setSubmitStatus('error');
+        setErrorMessage(result?.error || 'Ocurrió un error al enviar el mensaje. Escríbenos a infocod.codes@gmail.com.');
+      }
+    } catch (err: any) {
+      console.error('Error al enviar formulario:', err);
       setSubmitStatus('error');
-      setErrorMessage(result.error || 'Ocurrió un error inesperado');
+      setErrorMessage('Error al conectar con el servidor. Por favor intenta de nuevo o escríbenos directamente a infocod.codes@gmail.com.');
     }
   };
 
