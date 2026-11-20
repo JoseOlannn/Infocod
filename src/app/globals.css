@@ -50,46 +50,6 @@ h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-sora), var(--font-heading);
 }
 
-/* Screen-reader only utility */
-.sr-only {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  white-space: nowrap;
-  border: 0;
-}
-
-
-
-/* Glassmorphism Utilities (Light Mode) */
-.glass {
-  background: rgba(255, 255, 255, 0.7);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(0, 0, 0, 0.05);
-}
-
-.glass-card {
-  background: rgba(255, 255, 255, 0.8);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(0, 0, 0, 0.1);
-  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.05);
-}
-
-@keyframes marquee {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(-50%); }
-}
-
-.animate-marquee {
-  animation: marquee 20s linear infinite;
-}
-
 /* Custom Scrollbar for a premium feel */
 ::-webkit-scrollbar {
   width: 8px;
@@ -105,62 +65,3 @@ h1, h2, h3, h4, h5, h6 {
   background: #475569;
 }
 
-/* GSAP Navbar Themes */
-.theme-purple {
-  background-color: #1a0b2e !important;
-  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5) !important;
-}
-
-.theme-green {
-  background-color: #0b5c32 !important;
-  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3) !important;
-}
-
-/* ── Global button utilities used inside LaptopIntro ── */
-.corePrimaryBtnGlobal {
-  position: relative;
-  background: linear-gradient(135deg, #4F8EF7 0%, #6C2BFF 100%);
-  color: #ffffff;
-  padding: 1.2rem 3rem;
-  border-radius: 50px;
-  font-family: var(--font-jetbrains), monospace;
-  font-weight: 700;
-  font-size: 0.9rem;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-  text-decoration: none;
-  overflow: hidden;
-  transition: all 0.3s ease;
-  box-shadow: 0 10px 25px rgba(108, 43, 255, 0.2);
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.corePrimaryBtnGlobal:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 15px 35px rgba(108, 43, 255, 0.4);
-}
-
-.coreSecondaryBtnLightGlobal {
-  background-color: transparent;
-  color: #333333;
-  padding: 1.2rem 3rem;
-  border-radius: 50px;
-  font-family: var(--font-jetbrains), monospace;
-  font-weight: 600;
-  font-size: 0.9rem;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-  text-decoration: none;
-  border: 1px solid rgba(0, 0, 0, 0.2);
-  transition: all 0.3s ease;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.coreSecondaryBtnLightGlobal:hover {
-  background-color: rgba(0, 0, 0, 0.05);
-  border-color: #000000;
-}

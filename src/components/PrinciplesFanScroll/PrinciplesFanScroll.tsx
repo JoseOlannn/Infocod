@@ -1,5 +1,3 @@
-"use client";
-
 import styles from './PrinciplesFanScroll.module.css';
 
 // SVG 1: Transparencia (Escudo / Póliza)
@@ -105,7 +103,7 @@ const principles = [
 
 export default function PrinciplesFanScroll() {
   return (
-    <section id="principios-zettle-section" className="py-24 bg-[#f8fafc] border-y border-slate-200 relative overflow-hidden">
+    <section id="principios-zettle-section" className="py-24 bg-[#f8fafc] border-t border-slate-200 relative overflow-hidden">
       <div className="max-w-7xl mx-auto px-6">
         
         {/* Header */}

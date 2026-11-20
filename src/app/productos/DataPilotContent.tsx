@@ -300,8 +300,8 @@ export default function DataPilotContent({ active, isTransitioning }: any) {
                     />
                   );
                 })}
-                <text x="50" y="48" textAnchor="middle" className={styles.donutCenter}>{w.label}</text>
-                <text x="50" y="58" textAnchor="middle" className={styles.donutSub}>total</text>
+                <text x="50" y="47" textAnchor="middle" className={styles.donutCenter}>{w.label}</text>
+                <text x="50" y="61" textAnchor="middle" className={styles.donutSub}>total</text>
               </svg>
               <div className={styles.wDonutLegend}>
                 {labels.slice(0, w.data.length).map((l, i) => (

@@ -1,249 +1,377 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import dynamic from "next/dynamic";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { observeActive, prefersReducedMotion } from "@/utils/animation";
 import styles from "./HeroTech.module.css";
 
-const CyberGrid = dynamic(() => import("@/components/CyberGrid/CyberGrid"), {
-  ssr: false,
-});
-
-const WireframeGlobe = dynamic(
-  () => import("@/components/WireframeGlobe/WireframeGlobe"),
-  { ssr: false }
-);
+const CyberGrid = dynamic(() => import("@/components/CyberGrid/CyberGrid"), { ssr: false });
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
 }
 
-const TICKER = "SOFTWARE · SISTEMAS · INTELIGENCIA ARTIFICIAL · CLOUD · DEVOPS · APPS MOVILES · RPA · SAAS · ";
+const SLIDE_DURATION_MS = 4000;
 
-const SIZE = 520;
-const CX = SIZE / 2;
-const CY = SIZE / 2;
-const R_ORBIT = CX - 20; // 240
-const R_RING = CX - 80;  // 180
+const SLIDES = [
+  {
+    src: "/inicio/agenda+.jpg",
+    alt: "Agenda+ en uso desde una oficina moderna",
+    highlight: "ordena tu operación.",
+  },
+  {
+    src: "/inicio/masticod.jpg",
+    alt: "Masticod punto de venta en negocio real",
+    highlight: "impulsa tus ventas.",
+  },
+  {
+    src: "/inicio/datapilot.jpg",
+    alt: "DataPilot en sala de juntas ejecutiva",
+    highlight: "guía tus decisiones.",
+  },
+] as const;
 
 export default function HeroTech() {
+  const [activeIndex, setActiveIndex] = useState(0);
   const heroRef = useRef<HTMLElement>(null);
-  const frameRef = useRef<HTMLDivElement>(null);
-  const orbitRef = useRef<HTMLDivElement>(null);
-  const innerRef = useRef<HTMLDivElement>(null);
-  const brandRef = useRef<HTMLDivElement>(null);
+  const contentRef = useRef<HTMLDivElement>(null);
+  const headlineRef = useRef<HTMLHeadingElement>(null);
+  const highlightRef = useRef<HTMLSpanElement>(null);
+  const descRef = useRef<HTMLParagraphElement>(null);
   const ctaRef = useRef<HTMLDivElement>(null);
-  const cyberGridRef = useRef<HTMLDivElement>(null);
+  const slidesWrapRef = useRef<HTMLDivElement>(null);
+  const chuyCornerRef = useRef<HTMLDivElement>(null);
 
+  /* ── Entrada coreografiada de la columna izquierda + Chuy en la esquina + scroll ── */
   useEffect(() => {
-    // ── Continuous rotation for the single cool orbit ──
-    gsap.to(orbitRef.current, {
-      rotation: 360,
-      transformOrigin: "50% 50%",
-      duration: 18,
-      repeat: -1,
-      ease: "none",
-    });
+    const hero = heroRef.current;
+    const content = contentRef.current;
+    if (!hero || !content) return;
 
-    // ── Mouse Parallax (Flat 2D, no 3D clipping issues) ──
-    const onMove = (e: MouseEvent) => {
-      const px = e.clientX / window.innerWidth - 0.5;
-      const py = e.clientY / window.innerHeight - 0.5;
-
-      // Orbit moves slightly opposite to cursor (depth)
-      gsap.to(orbitRef.current, {
-        x: -px * 30,
-        y: -py * 20,
-        duration: 2,
-        ease: "power2.out",
-        overwrite: "auto",
-      });
-
-      // Inner elements move with cursor
-      gsap.to(innerRef.current, {
-        x: px * 15,
-        y: py * 10,
-        duration: 2.2,
-        ease: "power2.out",
-        overwrite: "auto",
-      });
-
-      // Subtle tilt of the whole frame
-      gsap.to(frameRef.current, {
-        rotateX: -py * 8,
-        rotateY: px * 8,
-        duration: 2.5,
-        ease: "power2.out",
-        transformPerspective: 1000,
-        overwrite: "auto",
-      });
-    };
-    window.addEventListener("mousemove", onMove);
+    if (prefersReducedMotion()) return;
 
     const ctx = gsap.context(() => {
-      gsap.set([brandRef.current, ctaRef.current], { opacity: 0, y: 22 });
-      gsap.set(frameRef.current, { opacity: 0, scale: 0.85 });
+      const letters = gsap.utils.toArray<HTMLElement>("[data-brand-char]", content);
+      const brackets = gsap.utils.toArray<HTMLElement>("[data-brand-bracket]", content);
 
-      const tl = gsap.timeline({ delay: 0.1, defaults: { ease: "power3.out" } });
-      tl.to(frameRef.current, { opacity: 1, scale: 1, duration: 1.2, ease: "back.out(1.4)" })
-        .to(brandRef.current, { opacity: 1, y: 0, duration: 0.8 }, "-=0.6")
-        .to(ctaRef.current, { opacity: 1, y: 0, duration: 0.7 }, "-=0.6");
+      gsap.set(brackets, { scale: 0.5, opacity: 0 });
+      gsap.set(letters, { y: 38, opacity: 0, rotateX: -45 });
+      gsap.set(headlineRef.current, { y: 20, opacity: 0 });
+      gsap.set(descRef.current, { y: 18, opacity: 0 });
+      gsap.set(ctaRef.current, { y: 20, opacity: 0 });
+      gsap.set(chuyCornerRef.current, { y: 40, opacity: 0, scale: 0.92 });
 
-      const exitTl = gsap.timeline({
-        scrollTrigger: {
-          trigger: heroRef.current,
-          start: "top top",
-          end: "+=75%",
-          pin: true,
-          scrub: 1,
-          anticipatePin: 1,
-        },
-      });
+      gsap
+        .timeline({ delay: 0.1, defaults: { ease: "power3.out" } })
+        .to(brackets, {
+          scale: 1,
+          opacity: 1,
+          duration: 0.5,
+          stagger: 0.12,
+          ease: "back.out(2)",
+        })
+        .to(
+          letters,
+          {
+            y: 0,
+            opacity: 1,
+            rotateX: 0,
+            duration: 0.65,
+            stagger: 0.04,
+            ease: "back.out(1.6)",
+          },
+          "-=0.42"
+        )
+        .to(
+          headlineRef.current,
+          {
+            y: 0,
+            opacity: 1,
+            duration: 0.55,
+          },
+          "-=0.32"
+        )
+        .to(
+          descRef.current,
+          {
+            y: 0,
+            opacity: 1,
+            duration: 0.5,
+          },
+          "-=0.35"
+        )
+        .to(
+          ctaRef.current,
+          {
+            y: 0,
+            opacity: 1,
+            duration: 0.5,
+          },
+          "-=0.35"
+        )
+        .to(
+          chuyCornerRef.current,
+          {
+            y: 0,
+            opacity: 1,
+            scale: 1,
+            duration: 0.65,
+            ease: "back.out(1.5)",
+          },
+          "-=0.4"
+        );
 
-      exitTl
-        .fromTo(frameRef.current,
-          { scale: 1, opacity: 1 },
-          { scale: 4, opacity: 0, ease: "power2.in", immediateRender: false }, 0)
-        .fromTo([brandRef.current, ctaRef.current],
-          { scale: 1, opacity: 1 },
-          { scale: 1.5, opacity: 0, ease: "power2.in", immediateRender: false }, 0)
-        .fromTo(cyberGridRef.current,
-          { scale: 1, opacity: 1 },
-          { opacity: 0, scale: 1.2, ease: "power2.in", immediateRender: false }, 0);
-    }, heroRef);
+      gsap
+        .timeline({
+          scrollTrigger: {
+            trigger: hero,
+            start: "top top",
+            end: "bottom top",
+            scrub: 0.6,
+          },
+        })
+        .to(
+          slidesWrapRef.current,
+          {
+            yPercent: 10,
+            scale: 1.04,
+            ease: "none",
+          },
+          0
+        )
+        .to(
+          content,
+          {
+            y: -40,
+            opacity: 0.2,
+            ease: "none",
+          },
+          0
+        );
+    }, hero);
+
+    return () => ctx.revert();
+  }, []);
+
+  /* ── Animación suave cada vez que cambia la frase sincronizada con la imagen ── */
+  useEffect(() => {
+    const el = highlightRef.current;
+    if (!el || prefersReducedMotion()) return;
+    gsap.fromTo(
+      el,
+      { y: 14, opacity: 0 },
+      { y: 0, opacity: 1, duration: 0.5, ease: "power3.out" }
+    );
+  }, [activeIndex]);
+
+  /* ── Rotación automática de las 3 imágenes cada 4 segundos ── */
+  useEffect(() => {
+    const hero = heroRef.current;
+    if (!hero) return;
+
+    let timer: ReturnType<typeof setInterval> | null = null;
+
+    const start = () => {
+      if (timer) return;
+      timer = setInterval(() => {
+        setActiveIndex((prev) => (prev + 1) % SLIDES.length);
+      }, SLIDE_DURATION_MS);
+    };
+
+    const stop = () => {
+      if (!timer) return;
+      clearInterval(timer);
+      timer = null;
+    };
+
+    const stopObserving = observeActive(hero, (isActive) => {
+      if (isActive) start();
+      else stop();
+    });
 
     return () => {
-      window.removeEventListener("mousemove", onMove);
-      ctx.revert();
+      stop();
+      stopObserving();
     };
   }, []);
 
-  const orbitCirc = 2 * Math.PI * R_ORBIT;
+  const currentSlide = SLIDES[activeIndex];
 
   return (
     <section ref={heroRef} className={styles.hero}>
-      <div ref={cyberGridRef} className={styles.cyberGrid}>
+      {/* 1. Lado izquierdo: fondo blanco con cuadrícula muy sutil */}
+      <div className={styles.gridLayer} aria-hidden="true">
         <CyberGrid />
       </div>
 
-      <div ref={frameRef} className={styles.circleFrame} style={{ width: SIZE, height: SIZE }}>
-
-        {/* ─── SINGLE COOL ORBIT RING ─── */}
-        <div ref={orbitRef} className={styles.orbitRing} style={{ zIndex: 10 }}>
-          <svg className={styles.circleSvg} viewBox={`0 0 ${SIZE} ${SIZE}`}>
-            <defs>
-              <filter id="orbit-glow" x="-20%" y="-20%" width="140%" height="140%">
-                <feGaussianBlur stdDeviation="4" result="blur" />
-                <feMerge><feMergeNode in="blur" /><feMergeNode in="SourceGraphic" /></feMerge>
-              </filter>
-
-              <linearGradient id="comet-tail-1" x1="0%" y1="100%" x2="0%" y2="0%">
-                <stop offset="0%" stopColor="#4F8EF7" stopOpacity="0" />
-                <stop offset="100%" stopColor="#4F8EF7" stopOpacity="1" />
-              </linearGradient>
-
-              <linearGradient id="comet-tail-2" x1="0%" y1="0%" x2="0%" y2="100%">
-                <stop offset="0%" stopColor="#6C2BFF" stopOpacity="0" />
-                <stop offset="100%" stopColor="#6C2BFF" stopOpacity="1" />
-              </linearGradient>
-            </defs>
-
-            {/* Base dashed track */}
-            <circle cx={CX} cy={CY} r={R_ORBIT}
-              stroke="rgba(100,116,139,0.25)" strokeWidth="1"
-              strokeDasharray="4 8" fill="none"
-            />
-            {/* Inner solid track */}
-            <circle cx={CX} cy={CY} r={R_ORBIT - 4}
-              stroke="rgba(79,142,247,0.15)" strokeWidth="1" fill="none"
-            />
-
-            {/* Comet 1 (Blue) */}
-            <g>
-              <circle cx={CX} cy={CY} r={R_ORBIT}
-                stroke="url(#comet-tail-1)" strokeWidth="3" fill="none"
-                strokeLinecap="round"
-                strokeDasharray={`180 ${orbitCirc}`}
-                strokeDashoffset="200"
-                filter="url(#orbit-glow)"
+      {/* 2. Lado derecho: las 3 imágenes cambiando cada 4s con difuminado blanco */}
+      <div ref={slidesWrapRef} className={styles.slidesSide} aria-hidden="true">
+        {SLIDES.map((slide, idx) => {
+          const isActive = idx === activeIndex;
+          return (
+            <div
+              key={slide.src}
+              className={`${styles.slide} ${isActive ? styles.slideActive : ""}`}
+            >
+              <Image
+                src={slide.src}
+                alt={slide.alt}
+                fill
+                preload={idx === 0}
+                sizes="(max-width: 768px) 100vw, 68vw"
+                className={styles.slideImage}
               />
-              <circle cx={CX} cy={CY - R_ORBIT} r="6" fill="#4F8EF7" />
-              <circle cx={CX} cy={CY - R_ORBIT} r="2.5" fill="#ffffff" />
-            </g>
+            </div>
+          );
+        })}
 
-            {/* Comet 2 (Purple) - Offset by 180 degrees */}
-            <g transform={`rotate(180 ${CX} ${CY})`}>
-              <circle cx={CX} cy={CY} r={R_ORBIT}
-                stroke="url(#comet-tail-2)" strokeWidth="3" fill="none"
-                strokeLinecap="round"
-                strokeDasharray={`180 ${orbitCirc}`}
-                strokeDashoffset="200"
-                filter="url(#orbit-glow)"
-              />
-              <circle cx={CX} cy={CY - R_ORBIT} r="6" fill="#6C2BFF" />
-              <circle cx={CX} cy={CY - R_ORBIT} r="2.5" fill="#ffffff" />
-            </g>
-          </svg>
-        </div>
+        <div className={styles.fadeBlend} />
+      </div>
 
-        {/* ─── INNER: 3D WIREFRAME GLOBE + BRAND OVERLAY ─── */}
-        <div ref={innerRef} className={styles.circleInner} style={{ zIndex: 15 }}>
-          {/* Frosted glass background circle */}
-          <svg
-            viewBox={`0 0 ${SIZE} ${SIZE}`}
-            style={{ position: "absolute", inset: 0, width: "100%", height: "100%", overflow: "visible" }}
-            aria-hidden="true"
-          >
-            <defs>
-              <radialGradient id="ht-fill" cx="50%" cy="50%" r="50%">
-                <stop offset="0%" stopColor="#ffffff" stopOpacity="0.92" />
-                <stop offset="70%" stopColor="#f8faff" stopOpacity="0.80" />
-                <stop offset="100%" stopColor="#eef3ff" stopOpacity="0.55" />
-              </radialGradient>
-            </defs>
-            {/* Frosted fill */}
-            <circle cx={CX} cy={CY} r={R_RING} fill="url(#ht-fill)" />
-            {/* Border ring */}
-            <circle cx={CX} cy={CY} r={R_RING}
-              stroke="rgba(100,116,139,0.35)" strokeWidth="1.5" fill="none"
-            />
-          </svg>
+      {/* 3. Esquina inferior derecha: Franjas curvas morada y verde + Chuy con laptop */}
+      <div ref={chuyCornerRef} className={styles.chuyCorner} aria-hidden="true">
+        {/* Franjas diagonales curvas morado + verde como la referencia */}
+        <svg
+          className={styles.cornerRibbons}
+          viewBox="0 0 620 260"
+          fill="none"
+          preserveAspectRatio="none"
+        >
+          <defs>
+            <linearGradient id="ribbon-purple" x1="0%" y1="100%" x2="100%" y2="0%">
+              <stop offset="0%" stopColor="#6C2BFF" />
+              <stop offset="100%" stopColor="#4F46E5" />
+            </linearGradient>
+            <linearGradient id="ribbon-green" x1="0%" y1="100%" x2="100%" y2="0%">
+              <stop offset="0%" stopColor="#10B981" />
+              <stop offset="100%" stopColor="#00C96B" />
+            </linearGradient>
+          </defs>
 
-          {/* Three.js Globe (centered) */}
-          <div className={styles.globeContainer}>
-            <WireframeGlobe size={R_RING * 2 - 20} />
-          </div>
+          {/* Franja superior morada */}
+          <path
+            d="M 10 260 C 175 215, 360 128, 620 28 L 620 260 Z"
+            fill="url(#ribbon-purple)"
+          />
 
-          {/* Brand text overlaid on globe */}
-          <div ref={brandRef} className={styles.brandBlock}>
-            <h1 className={styles.brandName}>Infocod</h1>
-            <div className={styles.brandRule} />
-            <p className={styles.brandTagline}>
-              Información a medida,<br />construida para durar.
-            </p>
-          </div>
+          {/* Franja inferior verde */}
+          <path
+            d="M 215 260 C 345 215, 470 165, 620 132 L 620 260 Z"
+            fill="url(#ribbon-green)"
+          />
+        </svg>
+
+        {/* Destellos verdes junto a la oreja derecha de Chuy */}
+        <svg
+          className={styles.chuySparkles}
+          viewBox="0 0 56 56"
+          fill="none"
+        >
+          <path d="M14 34L22 8L32 24L14 34Z" fill="#22C55E" />
+          <path d="M26 46L48 34L44 48L26 46Z" fill="#22C55E" />
+        </svg>
+
+        {/* Imagen de Chuy sentado con su laptop */}
+        <div className={styles.chuyWrapper}>
+          <Image
+            src="/inicio/chuy1.png"
+            alt="Chuy mascota de Infocod con laptop"
+            width={300}
+            height={360}
+            sizes="(max-width: 768px) 170px, 245px"
+            className={styles.chuyImg}
+          />
         </div>
       </div>
 
-      <div ref={ctaRef} className={styles.ctaGroup}>
-        <Link href="/contacto" className={styles.ctaPrimary}>
-          <span>Cotizar proyecto</span>
-          <svg className={styles.arrowIcon} viewBox="0 0 24 24" fill="none" stroke="currentColor">
-            <path d="M5 12h14M12 5l7 7-7 7" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-          </svg>
-        </Link>
-        <Link href="/servicios" className={styles.ctaSecondary}>
-          Ver servicios
-        </Link>
-      </div>
+      {/* 4. Columna izquierda limpia: <Infocod•> + titular + texto + botones */}
+      <div className={styles.container}>
+        <div ref={contentRef} className={styles.leftContent}>
+          <div className={styles.brandLockup} aria-label="Infocod">
+            <svg
+              data-brand-bracket
+              className={styles.bracketLeft}
+              viewBox="0 0 36 52"
+              fill="none"
+              aria-hidden="true"
+            >
+              <path
+                d="M31 7L7 26L31 45"
+                stroke="currentColor"
+                strokeWidth="6.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
 
-      <div className={styles.ticker} aria-hidden="true">
-        <div className={styles.tickerTrack}>
-          {Array.from({ length: 6 }).map((_, i) => (
-            <span key={i} className={styles.tickerItem}>{TICKER}</span>
-          ))}
+            <span className={styles.brandWord}>
+              {["I", "n", "f", "o"].map((ch, i) => (
+                <span key={i} data-brand-char className={styles.charInfo}>
+                  {ch}
+                </span>
+              ))}
+              {["c", "o", "d"].map((ch, i) => (
+                <span key={i + 4} data-brand-char className={styles.charCod}>
+                  {ch}
+                </span>
+              ))}
+            </span>
+
+            <svg
+              data-brand-bracket
+              className={styles.bracketRight}
+              viewBox="0 0 48 52"
+              fill="none"
+              aria-hidden="true"
+            >
+              <path
+                d="M6 7L29 26L6 45"
+                stroke="currentColor"
+                strokeWidth="6.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+              <circle cx="40" cy="26" r="5.5" fill="currentColor" />
+            </svg>
+          </div>
+
+          <h1 ref={headlineRef} className={styles.headline}>
+            Software a medida que{" "}
+            <span ref={highlightRef} className={styles.headlineHighlight}>
+              {currentSlide.highlight}
+            </span>
+          </h1>
+
+          <p ref={descRef} className={styles.description}>
+            Desarrollamos sistemas para tu empresa y productos propios pensados para
+            simplificar y hacer crecer tu operación diaria.
+          </p>
+
+          <div ref={ctaRef} className={styles.ctaGroup}>
+            <Link href="/contacto" className={styles.ctaPrimary}>
+              <span>Cotizar proyecto</span>
+              <svg
+                className={styles.arrowIcon}
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+              >
+                <path
+                  d="M5 12h14M12 5l7 7-7 7"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </Link>
+            <Link href="/servicios" className={styles.ctaSecondary}>
+              Ver servicios
+            </Link>
+          </div>
         </div>
       </div>
     </section>

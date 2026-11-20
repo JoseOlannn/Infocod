@@ -5,7 +5,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/dist/ScrollTrigger';
-import { ArrowRight, Clock, Activity, CalendarDays, LayoutDashboard, Plus, Columns, Settings, Circle, CheckCircle2, MoreHorizontal, PenSquare, Trash2, ChevronLeft, ChevronRight, Target } from 'lucide-react';
+import { ArrowRight, Clock, Activity, CalendarDays, Plus, Columns, Circle, CheckCircle2, PenSquare, Trash2, ChevronLeft, ChevronRight, Sparkles, Bell, RefreshCw, BarChart3, CheckSquare, ExternalLink } from 'lucide-react';
 import styles from './AgendaPlusContent.module.css';
 
 if (typeof window !== 'undefined') {
@@ -15,24 +15,46 @@ if (typeof window !== 'undefined') {
 export default function AgendaPlusContent({ active, isTransitioning }: { active: any, isTransitioning: boolean }) {
   const containerRef = useRef<HTMLDivElement>(null);
   const heroRef = useRef<HTMLElement>(null);
-  const imgRef = useRef<HTMLImageElement>(null);
+  const heroStageRef = useRef<HTMLDivElement>(null);
+  const stackSectionRef = useRef<HTMLElement>(null);
   
   const dashRef = useRef<HTMLDivElement>(null);
   const calRef = useRef<HTMLDivElement>(null);
   const kanbanRef = useRef<HTMLDivElement>(null);
 
-  // Hero animations
+  // Hero 3D & entrance animations
   useEffect(() => {
     if (isTransitioning) return;
     const ctx = gsap.context(() => {
-      gsap.fromTo(".heroText",
-        { opacity: 0, y: 30 },
-        { opacity: 1, y: 0, duration: 0.6, stagger: 0.1, ease: 'power3.out' }
+      gsap.fromTo(
+        "[data-hero-item]",
+        { opacity: 0, y: 28 },
+        { opacity: 1, y: 0, duration: 0.7, stagger: 0.09, ease: "power3.out" }
       );
-      gsap.fromTo(imgRef.current,
-        { opacity: 0, scale: 0.95 },
-        { opacity: 1, scale: 1, duration: 0.8, ease: 'power3.out', delay: 0.2 }
+      gsap.fromTo(
+        heroStageRef.current,
+        { opacity: 0, y: 55, rotateX: 24, scale: 0.92 },
+        { opacity: 1, y: 0, rotateX: 14, scale: 0.96, duration: 1.0, ease: "power3.out", delay: 0.2 }
       );
+      gsap.fromTo(
+        "[data-hero-float]",
+        { opacity: 0, y: 30, scale: 0.88 },
+        { opacity: 1, y: 0, scale: 1, duration: 0.7, stagger: 0.12, ease: "back.out(1.6)", delay: 0.45 }
+      );
+
+      // Endereza la ventana 3D al hacer scroll
+      gsap.to(heroStageRef.current, {
+        rotateX: 0,
+        scale: 1,
+        y: -15,
+        ease: "none",
+        scrollTrigger: {
+          trigger: heroRef.current,
+          start: "top top",
+          end: "bottom 40%",
+          scrub: 0.6,
+        },
+      });
     }, heroRef);
     return () => ctx.revert();
   }, [isTransitioning]);
@@ -128,83 +150,148 @@ export default function AgendaPlusContent({ active, isTransitioning }: { active:
     return () => ctx.revert();
   }, [isTransitioning]);
 
-  // Snake Unpinned Animation (Scrub as you scroll down)
+  // Zig-Zag alternating rows animation on scroll
   useEffect(() => {
-    if (isTransitioning) return;
+    if (isTransitioning || !stackSectionRef.current) return;
     const ctx = gsap.context(() => {
-      const path = document.getElementById('snakePathActive') as unknown as SVGPathElement | null;
-      if (!path) return;
-      
-      const length = path.getTotalLength();
-      gsap.set(path, { strokeDasharray: length, strokeDashoffset: length });
+      const rows = gsap.utils.toArray<HTMLElement>("[data-zigzag-row]", stackSectionRef.current);
 
-      // Draw path over the full section height
-      gsap.to(path, {
-        strokeDashoffset: 0,
-        ease: "none",
-        scrollTrigger: {
-          trigger: ".snake-section",
-          start: "top 70%",
-          end: "bottom 80%",
-          scrub: 1,
-        }
-      });
-
-      // Individual trigger for each snake card
-      const cards = gsap.utils.toArray('.snake-step');
-      cards.forEach((card: any) => {
-        gsap.fromTo(card,
-          { opacity: 0, scale: 0.8, y: 80 },
+      rows.forEach((row, idx) => {
+        const fromX = idx % 2 === 0 ? -60 : 60;
+        gsap.fromTo(
+          row,
+          { opacity: 0, x: fromX, y: 35 },
           {
             opacity: 1,
-            scale: 1,
+            x: 0,
             y: 0,
-            duration: 0.6,
-            ease: "back.out(1.2)",
+            duration: 0.75,
+            ease: "power3.out",
             scrollTrigger: {
-              trigger: card,
-              start: "top 80%",
-              toggleActions: "play none none reverse"
-            }
+              trigger: row,
+              start: "top 82%",
+              toggleActions: "play none none reverse",
+            },
           }
         );
       });
-
-    }, containerRef);
+    }, stackSectionRef);
     return () => ctx.revert();
   }, [isTransitioning]);
 
   return (
     <div ref={containerRef} className={styles.container}>
       
-      {/* ── HERO ── */}
-      <section 
-        ref={heroRef} 
-        className={styles.hero} 
-        style={{ 
-          backgroundImage: `linear-gradient(to bottom, rgba(8, 11, 20, 0.75) 0%, rgba(8, 11, 20, 0.4) 45%, rgba(8, 11, 20, 1) 100%), url('/productos/agenda+/agenda inicio.png')` 
-        }}
-        data-scroll-reveal
-      >
-        <div className={styles.heroContent}>
-          <div className={`${styles.heroTitleWrap} heroText`}>
-            <Image 
-              src="/productos/agenda+/agenda+.png" 
-              alt="Logo Agenda+" 
-              width={60} 
-              height={60} 
+      {/* ── HERO 3D ESCULTURAL (Sin encimar texto sobre captura) ── */}
+      <section ref={heroRef} className={styles.hero}>
+        {/* Luz ambiental y anillos arquitectónicos de fondo */}
+        <div className={styles.heroBackdrop} aria-hidden="true">
+          <div className={styles.heroAuraPurple} />
+          <div className={styles.heroAuraBlue} />
+          <div className={styles.heroGridLines} />
+        </div>
+
+        <div className={styles.heroHeader}>
+          <div data-hero-item className={styles.heroBrandRow}>
+            <Image
+              src="/productos/agenda+/agenda+.png"
+              alt="Logo Agenda+"
+              width={62}
+              height={62}
               className={styles.heroLogo}
             />
-            <h1 className={styles.heroTitle}>Agenda+</h1>
+            <h1 className={styles.heroTitle}>
+              Agenda<span className={styles.heroTitlePlus}>+</span>
+            </h1>
           </div>
-          <p className={`${styles.heroDesc} heroText`}>
-            {active.desc} Más que un calendario, es tu centro de operaciones personal.
+
+          <p data-hero-item className={styles.heroDesc}>
+            Más que un calendario: es tu centro de mando personal para dominar tus tareas,
+            hábitos y eventos sin distracciones.
           </p>
+
+          <div data-hero-item className={styles.heroActions}>
+            <a
+              href="https://agendamas.infocod.codes/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className={styles.heroPrimaryBtn}
+            >
+              <span>Abrir Agenda+</span>
+              <ExternalLink size={16} />
+            </a>
+            <a href="#agenda-workspace" className={styles.heroSecondaryBtn}>
+              Explorar interfaz
+            </a>
+          </div>
+        </div>
+
+        {/* Escenario 3D con la app enmarcada + cápsulas flotantes alrededor */}
+        <div className={styles.heroStagePerspective}>
+          <div ref={heroStageRef} className={styles.heroStageCard}>
+            {/* Barra superior de ventana macOS */}
+            <div className={styles.windowChrome}>
+              <div className={styles.windowDots}>
+                <span style={{ background: "#EF4444" }} />
+                <span style={{ background: "#F59E0B" }} />
+                <span style={{ background: "#10B981" }} />
+              </div>
+              <div className={styles.windowUrl}>agendamas.infocod.codes</div>
+              <div className={styles.windowStatus}>
+                <Sparkles size={12} /> Sync Activo
+              </div>
+            </div>
+
+            <div className={styles.windowScreen}>
+              <Image
+                src="/productos/agenda+/agenda inicio.png"
+                alt="Interfaz principal de Agenda+"
+                width={1360}
+                height={760}
+                preload
+                sizes="(max-width: 1200px) 94vw, 1120px"
+                className={styles.windowImg}
+              />
+            </div>
+
+            {/* Cápsula flotante izquierda */}
+            <div data-hero-float className={`${styles.floatChip} ${styles.floatChipLeft}`}>
+              <div className={styles.floatChipIcon} style={{ background: "rgba(16, 185, 129, 0.16)", color: "#34D399" }}>
+                <CheckCircle2 size={18} />
+              </div>
+              <div className={styles.floatChipText}>
+                <strong>Foco Diario al 92%</strong>
+                <span>6 de 7 bloques completados</span>
+              </div>
+            </div>
+
+            {/* Cápsula flotante derecha arriba */}
+            <div data-hero-float className={`${styles.floatChip} ${styles.floatChipRightTop}`}>
+              <div className={styles.floatChipIcon} style={{ background: "rgba(124, 58, 237, 0.2)", color: "#C4B5FD" }}>
+                <Bell size={18} />
+              </div>
+              <div className={styles.floatChipText}>
+                <strong>Aviso de Chuy · En 10 min</strong>
+                <span>Revisión de Sprint con equipo</span>
+              </div>
+            </div>
+
+            {/* Cápsula flotante derecha abajo */}
+            <div data-hero-float className={`${styles.floatChip} ${styles.floatChipRightBot}`}>
+              <div className={styles.floatChipIcon} style={{ background: "rgba(59, 130, 246, 0.18)", color: "#93C5FD" }}>
+                <RefreshCw size={18} />
+              </div>
+              <div className={styles.floatChipText}>
+                <strong>Google Calendar</strong>
+                <span>Sincronización bidireccional</span>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
       {/* ── EXPLAINER ── */}
-      <section className={styles.explainerSection} data-scroll-reveal>
+      <section id="agenda-workspace" className={styles.explainerSection} data-scroll-reveal>
         <h2 className={styles.heroTitle} style={{fontSize: 'clamp(2.5rem, 4vw, 4rem)', marginBottom: '1rem', color: '#fff'}}>
           Tu tiempo es el activo más valioso. <br />
           <span>Agenda+ lo organiza.</span>
@@ -524,77 +611,194 @@ export default function AgendaPlusContent({ active, isTransitioning }: { active:
         </div>
       </section>
 
-      {/* ── SECCIÓN SERPIENTE (SNAKE ANIMATION) ── */}
-      <section className={`${styles.snakeSection} snake-section`} data-scroll-reveal>
-        <div className={styles.snakeTitleWrap}>
-          <h3 className={styles.snakeTitle}>Y mucho más que un simple gestor...</h3>
-          <p className={styles.snakeSubtitle}>Descubre todo el poder que tienes a un clic.</p>
+      {/* ── SECCIÓN ZIG-ZAG ALTERNADA (Izquierda -> Derecha -> Izquierda -> Derecha) ── */}
+      <section ref={stackSectionRef} className={styles.zigzagSection}>
+        <div className={styles.stackHeader} data-scroll-reveal>
+          <h3 className={styles.stackTitle}>Y mucho más que un simple gestor...</h3>
+          <p className={styles.stackSubtitle}>
+            Descubre todo el poder que tienes a un clic.
+          </p>
         </div>
-        
-        <div className={styles.snakeContainer}>
-          <svg className={styles.snakeSvg} viewBox="0 0 800 2200" preserveAspectRatio="xMidYMin slice">
-            <path 
-              id="snakePath"
-              d="M 400 0 Q 700 275 400 550 T 400 1100 T 400 1650 T 400 2200" 
-              fill="none" 
-              stroke="rgba(255,255,255,0.05)" 
-              strokeWidth="4" 
-            />
-            <path 
-              id="snakePathActive"
-              d="M 400 0 Q 700 275 400 550 T 400 1100 T 400 1650 T 400 2200" 
-              fill="none" 
-              stroke="url(#snakeGrad)" 
-              strokeWidth="8" 
-              strokeLinecap="round"
-            />
-            <defs>
-              <linearGradient id="snakeGrad" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor="#7C3AED" />
-                <stop offset="50%" stopColor="#3B82F6" />
-                <stop offset="100%" stopColor="#10B981" />
-              </linearGradient>
-            </defs>
-          </svg>
 
-          <div className={`${styles.snakeStep} ${styles.stepLeft} snake-step`} style={{top: '12%'}}>
-            <div className={styles.snakeImageWrap}>
-              <Image src="/productos/agenda+/card1.png" alt="Notificaciones" width={300} height={200} style={{objectFit: 'contain', width: '100%', height: '100%'}} />
+        <div className={styles.zigzagList}>
+          {/* ── FILA 01 (Texto Izquierda / Chuy Derecha) ── */}
+          <div data-zigzag-row className={styles.zigzagRow}>
+            <div className={styles.zigzagTextCol}>
+              <div className={styles.stackMeta}>
+                <span className={styles.stackNum}>01</span>
+                <span className={styles.stackTag}>
+                  <Bell size={13} /> ALERTAS PROACTIVAS
+                </span>
+              </div>
+              <h4 className={styles.stackCardTitle}>Notificaciones Inteligentes</h4>
+              <p className={styles.stackCardDesc}>
+                Avisos proactivos y recordatorios dinámicos que aprenden de tus bloques de
+                enfoque para avisarte en el momento exacto sin que pierdas el ritmo de tu día.
+              </p>
+              <div className={styles.stackWidgetList}>
+                <div className={styles.stackToast}>
+                  <span className={styles.toastPulse} style={{ background: "#F59E0B" }} />
+                  <div className={styles.toastBody}>
+                    <strong>Entrega de propuesta · En 15 min</strong>
+                    <span>Todo listo: 4 subtareas completadas</span>
+                  </div>
+                  <span className={styles.toastTime}>Ahora</span>
+                </div>
+              </div>
             </div>
-            <div className={styles.snakeTextContent}>
-              <h4>Notificaciones Inteligentes</h4>
-              <p>Avisos proactivos y recordatorios dinámicos para que nunca pierdas el ritmo de tu día.</p>
+
+            <div className={`${styles.zigzagVisualCol} ${styles.visualAmber}`}>
+              <div className={styles.zigzagHalo} />
+              <Image
+                src="/productos/agenda+/card1.png"
+                alt="Chuy con campana dorada - Notificaciones Inteligentes"
+                width={420}
+                height={380}
+                sizes="(max-width: 900px) 260px, 360px"
+                className={styles.zigzagChuyImg}
+              />
             </div>
           </div>
 
-          <div className={`${styles.snakeStep} ${styles.stepRight} snake-step`} style={{top: '37%'}}>
-            <div className={styles.snakeImageWrap}>
-              <Image src="/productos/agenda+/card2.png" alt="Sincronización" width={300} height={200} style={{objectFit: 'contain', width: '100%', height: '100%'}} />
+          {/* ── FILA 02 (Chuy Izquierda / Texto Derecha) ── */}
+          <div data-zigzag-row className={`${styles.zigzagRow} ${styles.zigzagRowReverse}`}>
+            <div className={styles.zigzagTextCol}>
+              <div className={styles.stackMeta}>
+                <span className={styles.stackNum}>02</span>
+                <span className={styles.stackTag}>
+                  <RefreshCw size={13} /> MULTI-PLATAFORMA
+                </span>
+              </div>
+              <h4 className={styles.stackCardTitle}>Sincronización Total</h4>
+              <p className={styles.stackCardDesc}>
+                Conecta con Google Calendar, Outlook y Apple Calendar al instante. Cualquier
+                cambio se refleja en tiempo real sin conflictos ni eventos duplicados.
+              </p>
+              <div className={styles.syncHub}>
+                <div className={styles.syncPill}>
+                  <span className={styles.syncDot} style={{ background: "#3B82F6" }} />
+                  <span>Google Calendar</span>
+                  <small>Conectado</small>
+                </div>
+                <div className={styles.syncPill}>
+                  <span className={styles.syncDot} style={{ background: "#8B5CF6" }} />
+                  <span>Outlook 365</span>
+                  <small>Tiempo real</small>
+                </div>
+              </div>
             </div>
-            <div className={styles.snakeTextContent}>
-              <h4>Sincronización Total</h4>
-              <p>Conecta con Google Calendar, Outlook y Apple Calendar al instante, sin conflictos ni retrasos.</p>
+
+            <div className={`${styles.zigzagVisualCol} ${styles.visualBlue}`}>
+              <div className={styles.zigzagHalo} />
+              <Image
+                src="/productos/agenda+/card2.png"
+                alt="Chuy atrapando notificación - Sincronización Total"
+                width={420}
+                height={380}
+                sizes="(max-width: 900px) 260px, 360px"
+                className={styles.zigzagChuyImg}
+              />
             </div>
           </div>
 
-          <div className={`${styles.snakeStep} ${styles.stepLeft} snake-step`} style={{top: '62%'}}>
-            <div className={styles.snakeImageWrap}>
-              <Image src="/productos/agenda+/card3.png" alt="Analíticas" width={300} height={200} style={{objectFit: 'contain', width: '100%', height: '100%'}} />
+          {/* ── FILA 03 (Texto Izquierda / Chuy Derecha) ── */}
+          <div data-zigzag-row className={styles.zigzagRow}>
+            <div className={styles.zigzagTextCol}>
+              <div className={styles.stackMeta}>
+                <span className={styles.stackNum}>03</span>
+                <span className={styles.stackTag}>
+                  <BarChart3 size={13} /> MÉTRICAS DE TIEMPO
+                </span>
+              </div>
+              <h4 className={styles.stackCardTitle}>Analíticas de Productividad</h4>
+              <p className={styles.stackCardDesc}>
+                Entiende cómo inviertes tu tiempo. Gráficas claras de horas de concentración y
+                cumplimiento que te ayudan a optimizar tu semana laboral.
+              </p>
+              <div className={styles.analyticsBox}>
+                <div className={styles.analyticsHeader}>
+                  <span>Rendimiento semanal</span>
+                  <strong>+38% enfoque</strong>
+                </div>
+                <div className={styles.analyticsBars}>
+                  {[
+                    { day: "L", h: "52%" },
+                    { day: "M", h: "68%" },
+                    { day: "X", h: "84%", active: true },
+                    { day: "J", h: "76%" },
+                    { day: "V", h: "96%", active: true },
+                    { day: "S", h: "45%" },
+                    { day: "D", h: "30%" },
+                  ].map((b) => (
+                    <div key={b.day} className={styles.analyticsCol}>
+                      <div className={styles.analyticsTrack}>
+                        <span
+                          className={`${styles.analyticsFill} ${
+                            b.active ? styles.analyticsFillActive : ""
+                          }`}
+                          style={{ height: b.h }}
+                        />
+                      </div>
+                      <small>{b.day}</small>
+                    </div>
+                  ))}
+                </div>
+              </div>
             </div>
-            <div className={styles.snakeTextContent}>
-              <h4>Analíticas de Productividad</h4>
-              <p>Entiende cómo inviertes tu tiempo. Gráficas claras que te ayudan a optimizar tu semana laboral.</p>
+
+            <div className={`${styles.zigzagVisualCol} ${styles.visualPurple}`}>
+              <div className={styles.zigzagHalo} />
+              <Image
+                src="/productos/agenda+/card3.png"
+                alt="Chuy con megáfono - Analíticas de Productividad"
+                width={420}
+                height={380}
+                sizes="(max-width: 900px) 260px, 360px"
+                className={styles.zigzagChuyImg}
+              />
             </div>
           </div>
 
-          <div className={`${styles.snakeStep} ${styles.stepRight} snake-step`} style={{top: '87%'}}>
-            <div className={styles.snakeIcon}><Target size={32}/></div>
-            <div className={styles.snakeTextContent}>
-              <h4>Gestión de Tareas Flexible</h4>
-              <p>Asigna prioridades, establece fechas límite y desglosa grandes proyectos en pasos manejables.</p>
+          {/* ── FILA 04 (Chuy Izquierda / Texto Derecha) ── */}
+          <div data-zigzag-row className={`${styles.zigzagRow} ${styles.zigzagRowReverse}`}>
+            <div className={styles.zigzagTextCol}>
+              <div className={styles.stackMeta}>
+                <span className={styles.stackNum}>04</span>
+                <span className={styles.stackTag}>
+                  <CheckSquare size={13} /> FLUJO A TU MEDIDA
+                </span>
+              </div>
+              <h4 className={styles.stackCardTitle}>Gestión de Tareas Flexible</h4>
+              <p className={styles.stackCardDesc}>
+                Asigna prioridades, establece fechas límite y desglosa grandes proyectos en
+                pasos manejables para avanzar todos los días.
+              </p>
+              <div className={styles.taskPreviewList}>
+                <div className={styles.taskPreviewRow}>
+                  <CheckCircle2 size={16} color="#10B981" />
+                  <span className={styles.taskDone}>Diseño de sprint semanal</span>
+                  <em className={styles.prioHigh}>ALTA</em>
+                </div>
+                <div className={styles.taskPreviewRow}>
+                  <Circle size={16} color="#60A5FA" />
+                  <span>Lanzamiento de versión 2.4</span>
+                  <em className={styles.prioLow}>HOY 17:00</em>
+                </div>
+              </div>
+            </div>
+
+            <div className={`${styles.zigzagVisualCol} ${styles.visualGreen}`}>
+              <div className={styles.zigzagHalo} />
+              <Image
+                src="/productos/agenda+/chuy 1.png"
+                alt="Chuy Gestión de Tareas Flexible"
+                width={400}
+                height={380}
+                sizes="(max-width: 900px) 260px, 340px"
+                className={styles.zigzagChuyImg}
+              />
             </div>
           </div>
-
         </div>
       </section>
 

@@ -1,635 +1,1976 @@
+/* ============================================================
+   Masticod — Diseño Material Flat / Swiss Tactile POS
+   Superficies 100% sólidas, bordes nítidos, cero blur difuso
+   ============================================================ */
+
 .container {
   width: 100%;
   min-height: 100vh;
-  background-color: #FAFAFA; /* Light clean background */
-  color: #0F172A; /* Dark slate text */
-  font-family: var(--font-inter), sans-serif;
-  overflow-x: hidden; /* Fix GSAP scroll issues */
+  background-color: #F4F5F7;
+  background-image:
+    linear-gradient(to right, rgba(15, 23, 42, 0.035) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(15, 23, 42, 0.035) 1px, transparent 1px);
+  background-size: 48px 48px;
+  color: #0F172A;
+  font-family: var(--font-manrope), sans-serif;
+  overflow-x: hidden;
   position: relative;
 }
 
-/* ── ABSTRACT LINES BACKGROUND ── */
-.bgWrapper {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 0;
-  pointer-events: none;
-  overflow: hidden;
-  
-  /* Cool abstract diagonal intersecting lines design */
-  background-image: 
-    repeating-linear-gradient(45deg, rgba(0, 0, 0, 0.03) 0, rgba(0, 0, 0, 0.03) 1px, transparent 1px, transparent 60px),
-    repeating-linear-gradient(-45deg, rgba(0, 0, 0, 0.02) 0, rgba(0, 0, 0, 0.02) 1px, transparent 1px, transparent 80px);
-}
-
-/* Soft glowing orbs behind the lines */
-.meshOrb1, .meshOrb2 {
-  position: absolute;
-  border-radius: 50%;
-  filter: blur(100px);
-  opacity: 0.4;
-}
-
-.meshOrb1 {
-  width: 50vw; height: 50vw;
-  background: #D1FAE5; /* Soft emerald light */
-  top: -10%; left: -10%;
-}
-
-.meshOrb2 {
-  width: 50vw; height: 50vw;
-  background: #E0E7FF; /* Soft blue light */
-  bottom: 20%; right: -10%;
-}
-
-/* HERO */
+/* ── 1. HERO MATERIAL FLAT ── */
 .hero {
   position: relative;
-  z-index: 10;
-  padding: 8rem 2rem 4rem 2rem;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  min-height: 80vh;
+  z-index: 2;
+  padding: 2.25rem 2rem 3.5rem;
+  max-width: 1320px;
+  margin: 0 auto;
 }
 
-.heroContent {
-  width: 100%;
-  max-width: 1200px;
+.heroGrid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1.05fr 0.95fr;
   align-items: center;
-  gap: 4rem;
-}
-@media (max-width: 1024px) {
-  .heroContent { grid-template-columns: 1fr; text-align: center; }
-  .heroTextSide { align-items: center !important; text-align: center !important; }
-  .heroTitleWrap { align-items: center !important; }
+  gap: 3.5rem;
 }
 
-.heroTextSide {
+.heroLeft {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 1.5rem;
-  text-align: left;
+  gap: 1.35rem;
 }
 
-.heroTitleWrap {
-  width: 100%;
+.flatTagRow {
   display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 1rem;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.6rem;
 }
 
-.heroLogo {
-  filter: drop-shadow(0 10px 15px rgba(16, 185, 129, 0.2));
+.flatStatusPill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.38rem 0.85rem;
+  border-radius: 6px;
+  background: #10B981;
+  color: #052E16;
+  font-family: var(--font-jetbrains), monospace;
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+}
+
+.flatStatusDot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #052E16;
+}
+
+.flatCodePill {
+  padding: 0.38rem 0.85rem;
+  border-radius: 6px;
+  background: #FFFFFF;
+  border: 2px solid #0F172A;
+  color: #0F172A;
+  font-family: var(--font-jetbrains), monospace;
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
 }
 
 .heroTitle {
-  font-size: clamp(3.5rem, 8vw, 6rem);
-  font-weight: 800;
   margin: 0;
-  line-height: 1;
-  background: linear-gradient(to bottom right, #0F172A, #10B981);
-  -webkit-background-clip: text;
-  color: transparent;
-  letter-spacing: -0.04em;
-}
-
-.heroDesc {
-  font-size: clamp(1.1rem, 2vw, 1.3rem);
-  color: #475569;
-  line-height: 1.6;
-  max-width: 600px;
-}
-
-/* Mockup Side */
-.heroMockupSide {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  perspective: 1000px;
-}
-
-.mockupDevice {
-  width: 100%;
-  max-width: 500px;
-  aspect-ratio: 4/3;
-  background: rgba(255, 255, 255, 0.4);
-  backdrop-filter: blur(20px);
-  border: 2px solid rgba(255, 255, 255, 0.8);
-  border-radius: 24px;
-  padding: 1rem;
-  box-shadow: 
-    0 25px 50px -12px rgba(0,0,0,0.1),
-    inset 0 0 0 1px rgba(255,255,255,0.5);
-  transform: rotateY(-15deg) rotateX(10deg);
-  animation: floatDevice 6s ease-in-out infinite;
-}
-
-.mockupScreen {
-  width: 100%;
-  height: 100%;
-  background: #ffffff;
-  border-radius: 12px;
-  box-shadow: inset 0 2px 10px rgba(0,0,0,0.05);
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-}
-
-.mockupHeader {
-  height: 40px;
-  border-bottom: 1px solid #F1F5F9;
-  display: flex;
-  align-items: center;
-  padding: 0 1rem;
-  gap: 1rem;
-}
-.mockupCircle { width: 12px; height: 12px; border-radius: 50%; background: #10B981; }
-.mockupLine { height: 8px; border-radius: 4px; background: #E2E8F0; width: 100%; }
-
-.mockupBody {
-  flex: 1;
-  display: flex;
-}
-.mockupSidebar {
-  width: 30%;
-  border-right: 1px solid #F1F5F9;
-  padding: 1rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-}
-.mockupMain {
-  flex: 1;
-  padding: 1rem;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1rem;
-  background: #F8FAFC;
-}
-.mockupCard {
-  background: #ffffff;
-  border-radius: 8px;
-  border: 1px solid #E2E8F0;
-}
-
-.mcVentas, .mcTop, .mcInv, .mcTicket {
-  display: flex; flex-direction: column; justify-content: flex-start; align-items: flex-start;
-  padding: 1rem; overflow: hidden; position: relative; box-sizing: border-box;
-}
-.mcTitle {
-  font-size: 0.6rem; color: #64748B; text-transform: uppercase; font-weight: 700; letter-spacing: 0.05em; margin-bottom: 0.25rem;
-}
-.mcValue { font-size: 1.4rem; color: #0F172A; font-weight: 800; }
-.mcChartLine {
-  width: 100%; height: 30px; border-bottom: 2px solid #E2E8F0; margin-top: auto; position: relative;
-}
-.mcChartFill {
-  position: absolute; bottom: -2px; left: 0; width: 60%; height: 2px; background: #10B981;
-  box-shadow: 0 -15px 20px rgba(16,185,129,0.3);
-  animation: growWidth 2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-}
-
-.mcList { width: 100%; display: flex; flex-direction: column; gap: 0.4rem; margin-top: 0.5rem; }
-.mcListItem { display: flex; align-items: center; gap: 0.5rem; width: 100%; }
-.mcDot { width: 6px; height: 6px; border-radius: 50%; background: #10B981; flex-shrink: 0; }
-.mcBar { height: 6px; background: #E2E8F0; border-radius: 4px; animation: growVar 2s cubic-bezier(0.4, 0, 0.2, 1) forwards; }
-
-.mcDonutWrap { width: 100%; display: flex; justify-content: center; align-items: center; margin-top: 0.5rem; position: relative; }
-.mcDonut {
-  width: 50px; height: 50px; border-radius: 50%;
-  animation: fillDonut 2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-}
-.mcDonutHole {
-  position: absolute; width: 34px; height: 34px; background: #fff; border-radius: 50%;
-  display: flex; align-items: center; justify-content: center;
-}
-.mcDonutVal { font-size: 0.65rem; font-weight: 800; color: #0F172A; }
-
-.mcValue2 { font-size: 1.1rem; color: #0F172A; font-weight: 800; }
-.mcTrend { font-size: 0.65rem; color: #10B981; font-weight: 700; display: flex; align-items: center; gap: 0.2rem; margin-top: auto; }
-
-@keyframes growWidth { from { width: 0; } }
-@keyframes growVar { from { width: 0; } to { width: var(--w); } }
-@keyframes fillDonut { 
-  0% { background: conic-gradient(#10B981 0%, #F1F5F9 0%); } 
-  100% { background: conic-gradient(#10B981 85%, #F1F5F9 85%); } 
-}
-
-@keyframes floatDevice {
-  0%, 100% { transform: rotateY(-15deg) rotateX(10deg) translateY(0px); }
-  50% { transform: rotateY(-15deg) rotateX(10deg) translateY(-20px); }
-}
-
-
-/* ── FILOSOFÍA ── */
-.philosophySection {
-  max-width: 1400px; margin: 4rem auto 8rem; padding: 0 4rem;
-  display: flex; flex-direction: column; gap: 4rem; position: relative; z-index: 10;
-}
-.philosophyHeader {
-  text-align: center; max-width: 800px; margin: 0 auto;
-}
-.philosophyTitle {
-  font-size: clamp(2rem, 4vw, 3rem); font-weight: 800; color: #0F172A; line-height: 1.2; margin-bottom: 1.5rem; letter-spacing: -0.02em;
-}
-.philosophyHighlight {
-  color: #10B981;
-}
-.philosophyDesc {
-  font-size: 1.1rem; color: #475569; line-height: 1.6;
-}
-.philosophyBento {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  grid-auto-rows: 250px;
-  gap: 1.5rem;
-}
-.bentoItem {
-  border-radius: 32px; padding: 3rem; position: relative; overflow: hidden;
-  display: flex; align-items: flex-end; transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-}
-.bentoItem:hover {
-  transform: translateY(-5px) scale(1.01);
-}
-.bentoContent {
-  position: relative; z-index: 2; max-width: 85%;
-}
-.bentoIconBg {
-  position: absolute; top: -20px; right: -20px; opacity: 0.05; color: #000;
-  z-index: 1; pointer-events: none; transition: transform 0.5s ease;
-}
-.bentoItem:hover .bentoIconBg { transform: scale(1.1) rotate(-5deg); }
-.bentoTitle {
-  font-size: 1.5rem; font-weight: 800; color: #0F172A; margin-bottom: 0.5rem; letter-spacing: -0.02em;
-}
-.bentoDesc {
-  font-size: 1rem; color: #475569; line-height: 1.5;
-}
-
-.bentoEspecializacion {
-  grid-column: span 2; background: #F1F5F9;
-}
-.bentoEspecializacion .bentoIconBg { color: #334155; opacity: 0.04; }
-
-.bentoListo {
-  grid-column: span 1; background: #ECFDF5;
-}
-.bentoListo .bentoTitle { color: #064E3B; }
-.bentoListo .bentoDesc { color: #047857; }
-.bentoListo .bentoIconBg { color: #10B981; opacity: 0.15; right: -40px; top: -10px; }
-
-.bentoEcosistema {
-  grid-column: span 3; background: #F8FAFC; align-items: center;
-}
-.bentoEcosistema .bentoContent { max-width: 60%; }
-.bentoEcosistema .bentoIconBg { top: 50%; right: 5%; transform: translateY(-50%); opacity: 0.03; color: #334155; }
-.bentoItem.bentoEcosistema:hover .bentoIconBg { transform: translateY(-50%) scale(1.05) rotate(-5deg); }
-
-@media (max-width: 900px) {
-  .philosophyBento { grid-template-columns: 1fr; grid-auto-rows: auto; }
-  .bentoEspecializacion, .bentoListo, .bentoEcosistema { grid-column: span 1; }
-  .bentoEcosistema .bentoContent { max-width: 100%; }
-  .bentoIconBg { top: 10px; right: 10px; opacity: 0.08; }
-}
-
-.lineaTitleWrap {
-  text-align: center; margin: 4rem auto 0; max-width: 800px; padding: 0 2rem;
-  position: relative; z-index: 10;
-}
-.lineaTitle {
-  font-size: clamp(2.5rem, 4vw, 3.5rem); font-weight: 900; color: #0F172A;
-  letter-spacing: -0.03em; margin-bottom: 0.5rem;
-}
-.lineaDesc {
-  font-size: 1.2rem; color: #64748B; font-weight: 500;
-}
-
-/* ZIG-ZAG LAYOUT (SWISS STYLE) */
-.zigzagContainer {
-  position: relative;
-  z-index: 10;
-  max-width: 1300px;
-  margin: 0 auto;
-  padding: 4rem 2rem;
-  display: flex;
-  flex-direction: column;
-  gap: 10rem;
-}
-
-.zigzagRow {
-  display: flex;
-  align-items: center;
-  gap: 4rem;
-  width: 100%;
-}
-
-.zigzagRow.reverse {
-  flex-direction: row-reverse;
-}
-
-@media (max-width: 1024px) {
-  .zigzagRow, .zigzagRow.reverse {
-    flex-direction: column;
-    gap: 3rem;
-  }
-}
-
-/* Swiss Style Typography - Light Mode */
-.textContent {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-}
-
-.variantTag {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.75rem;
-  font-size: 0.9rem;
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-}
-
-.variantIconWrapper {
-  width: 32px;
-  height: 32px;
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: rgba(0, 0, 0, 0.05);
-}
-
-.variantTitle {
-  font-size: clamp(2.5rem, 4vw, 3.5rem);
-  font-weight: 800;
-  line-height: 1.1;
-  letter-spacing: -0.03em;
-  margin: 0;
+  font-family: var(--font-outfit), var(--font-sora), sans-serif;
+  font-size: clamp(3.6rem, 7vw, 5.8rem);
+  font-weight: 900;
+  line-height: 0.96;
+  letter-spacing: -0.045em;
   color: #0F172A;
 }
 
-.variantDesc {
-  font-size: 1.25rem;
+.heroTitleAccent {
+  color: #10B981;
+}
+
+.heroDesc {
+  margin: 0;
+  max-width: 540px;
+  font-size: clamp(1.02rem, 1.3vw, 1.16rem);
+  line-height: 1.65;
+  color: #334155;
+  font-weight: 500;
+}
+
+.heroDesc strong {
+  color: #0F172A;
+  font-weight: 800;
+}
+
+/* Bloques KPI planos */
+.kpiStrip {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.85rem;
+  width: 100%;
+  max-width: 520px;
+}
+
+.kpiTile {
+  background: #FFFFFF;
+  border: 2px solid #0F172A;
+  border-radius: 10px;
+  padding: 0.85rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  box-shadow: 4px 4px 0 #0F172A;
+}
+
+.kpiNum {
+  font-family: var(--font-jetbrains), monospace;
+  font-size: 1.55rem;
+  font-weight: 800;
+  color: #0F172A;
+  line-height: 1.1;
+}
+
+.kpiLabel {
+  font-size: 0.76rem;
+  font-weight: 700;
+  color: #64748B;
+}
+
+/* Chips de salto rápido a cada giro */
+.quickJumps {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  margin-top: 0.25rem;
+}
+
+.quickJumpsLabel {
+  font-family: var(--font-jetbrains), monospace;
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  color: #64748B;
+}
+
+.quickChips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+
+.quickChip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.42rem 0.78rem;
+  border-radius: 8px;
+  background: #FFFFFF;
+  border: 1.5px solid #CBD5E1;
+  color: #0F172A;
+  font-size: 0.78rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: border-color 0.15s ease, transform 0.15s ease, background 0.15s ease;
+}
+
+.quickChip:hover {
+  border-color: var(--chip-color, #10B981);
+  background: #F8FAFC;
+  transform: translateY(-2px);
+}
+
+/* ── Terminal POS derecha (Material Flat) ── */
+.heroRight {
+  display: flex;
+  justify-content: center;
+}
+
+.flatTerminal {
+  width: 100%;
+  background: #FFFFFF;
+  border: 2.5px solid #0F172A;
+  border-radius: 16px;
+  box-shadow: 10px 10px 0 #0F172A;
+  overflow: hidden;
+}
+
+.terminalBar {
+  background: #0F172A;
+  color: #FFFFFF;
+  padding: 0.85rem 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: var(--font-jetbrains), monospace;
+  font-size: 0.72rem;
+}
+
+.terminalBrand {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+}
+
+.terminalSquare {
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+  background: #10B981;
+}
+
+.terminalBarcode {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.2rem 0.6rem;
+  border-radius: 4px;
+  background: #1E293B;
+  color: #94A3B8;
+}
+
+.terminalBody {
+  padding: 1.25rem;
+  display: grid;
+  grid-template-columns: 1.2fr 0.8fr;
+  gap: 1rem;
+  background: #F8FAFC;
+}
+
+.flatTile {
+  border-radius: 12px;
+  padding: 1.15rem;
+  border: 2px solid #0F172A;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.tileEmerald {
+  background: #10B981;
+  color: #052E16;
+}
+
+.tileWhite {
+  background: #FFFFFF;
+  color: #0F172A;
+}
+
+.tileSlate {
+  background: #0F172A;
+  color: #FFFFFF;
+}
+
+.tileTopRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.tileTagLight {
+  font-family: var(--font-jetbrains), monospace;
+  font-size: 0.66rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  opacity: 0.85;
+}
+
+.tileTagDark {
+  font-family: var(--font-jetbrains), monospace;
+  font-size: 0.66rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  color: #64748B;
+}
+
+.tileBadgeLight {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.2rem;
+  padding: 0.15rem 0.45rem;
+  border-radius: 4px;
+  background: #052E16;
+  color: #6EE7B7;
+  font-family: var(--font-jetbrains), monospace;
+  font-size: 0.65rem;
+  font-weight: 700;
+}
+
+.tileBigValue {
+  font-family: var(--font-jetbrains), monospace;
+  font-size: 1.85rem;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.tileMidValue {
+  font-family: var(--font-jetbrains), monospace;
+  font-size: 1.65rem;
+  font-weight: 800;
+  color: #0F172A;
+}
+
+.tileTrendGreen {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.76rem;
+  font-weight: 800;
+  color: #059669;
+}
+
+.tileFlatBars {
+  height: 36px;
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  align-items: end;
+  gap: 5px;
+}
+
+.tileFlatBars span {
+  background: #052E16;
+  border-radius: 3px 3px 0 0;
+}
+
+.tilePct {
+  font-family: var(--font-jetbrains), monospace;
+  font-size: 1.1rem;
+  color: #10B981;
+}
+
+.flatProgressTrack {
+  width: 100%;
+  height: 10px;
+  border-radius: 4px;
+  background: #1E293B;
+  overflow: hidden;
+}
+
+.flatProgressFill {
+  height: 100%;
+  background: #10B981;
+}
+
+.tileFootLight {
+  font-size: 0.72rem;
+  color: #94A3B8;
+  font-weight: 600;
+}
+
+.miniSkuList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.miniSkuRow {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.76rem;
+  font-weight: 700;
+  padding-bottom: 0.3rem;
+  border-bottom: 1px solid #E2E8F0;
+}
+
+.miniSkuRow:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+/* ── 2. FILOSOFÍA EN BLOQUES MATERIAL FLAT ── */
+.philosophySection {
+  max-width: 1320px;
+  margin: 3rem auto 5rem;
+  padding: 0 2rem;
+}
+
+.philosophyHeader {
+  text-align: center;
+  max-width: 780px;
+  margin: 0 auto 3rem;
+}
+
+.sectionEyebrow {
+  display: inline-block;
+  margin-bottom: 0.6rem;
+  padding: 0.3rem 0.75rem;
+  border-radius: 4px;
+  background: #E2E8F0;
+  color: #0F172A;
+  font-family: var(--font-jetbrains), monospace;
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+}
+
+.philosophyTitle {
+  font-family: var(--font-outfit), sans-serif;
+  font-size: clamp(2rem, 3.8vw, 3rem);
+  font-weight: 900;
+  color: #0F172A;
+  line-height: 1.15;
+  margin: 0 0 1rem;
+  letter-spacing: -0.03em;
+}
+
+.philosophyHighlight {
+  color: #059669;
+}
+
+.philosophyDesc {
+  font-size: 1.08rem;
   color: #475569;
   line-height: 1.6;
   margin: 0;
-  max-width: 500px;
 }
 
-/* POS SIMULATION CONTAINER - LIGHT MODE */
+.flatBentoGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+}
+
+.flatBentoCard {
+  border-radius: 14px;
+  padding: 2rem;
+  border: 2px solid #0F172A;
+  box-shadow: 6px 6px 0 #0F172A;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.bentoNavy {
+  background: #0F172A;
+  color: #FFFFFF;
+}
+
+.bentoEmerald {
+  background: #10B981;
+  color: #052E16;
+}
+
+.bentoSurface {
+  background: #FFFFFF;
+  color: #0F172A;
+}
+
+.bentoHeaderRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.bentoNum,
+.bentoNumDark {
+  font-family: var(--font-jetbrains), monospace;
+  font-size: 0.85rem;
+  font-weight: 800;
+  opacity: 0.7;
+}
+
+.bentoIconFlat {
+  width: 42px;
+  height: 42px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.bentoTitleLight,
+.bentoTitleDark,
+.bentoTitle {
+  margin: 0;
+  font-family: var(--font-outfit), sans-serif;
+  font-size: 1.45rem;
+  font-weight: 800;
+}
+
+.bentoDescLight {
+  margin: 0;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: #CBD5E1;
+}
+
+.bentoDescDark {
+  margin: 0;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: #064E3B;
+  font-weight: 600;
+}
+
+.bentoDesc {
+  margin: 0;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: #475569;
+}
+
+/* ── 3. CONSOLA INTERACTIVA MATERIAL FLAT (8 PESTAÑAS) ── */
+.consoleSection {
+  max-width: 1320px;
+  margin: 0 auto 5rem;
+  padding: 1rem 2rem 0;
+}
+
+.consoleHeader {
+  text-align: center;
+  max-width: 720px;
+  margin: 0 auto 2.2rem;
+}
+
+.lineaTitle {
+  font-family: var(--font-outfit), sans-serif;
+  font-size: clamp(2.1rem, 3.8vw, 3.1rem);
+  font-weight: 900;
+  color: #0F172A;
+  letter-spacing: -0.03em;
+  margin: 0 0 0.5rem;
+}
+
+.lineaDesc {
+  font-size: 1.08rem;
+  color: #475569;
+  margin: 0;
+}
+
+/* Barra de 8 botones Material Flat */
+.tabsRail {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  gap: 0.6rem;
+  margin-bottom: 1.5rem;
+}
+
+.flatTab {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  padding: 0.85rem 0.5rem;
+  border-radius: 10px;
+  background: #FFFFFF;
+  border: 2px solid #CBD5E1;
+  color: #334155;
+  cursor: pointer;
+  transition: transform 0.15s ease, border-color 0.15s ease, background 0.15s ease;
+}
+
+.flatTab:hover {
+  border-color: #0F172A;
+  transform: translateY(-2px);
+}
+
+.flatTabActive {
+  background: var(--tab-color, #10B981);
+  border-color: #0F172A;
+  color: #FFFFFF;
+  box-shadow: 4px 4px 0 #0F172A;
+  transform: translateY(-2px);
+}
+
+.flatTabIcon {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: var(--tab-soft, #F1F5F9);
+  color: var(--tab-color, #0F172A);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.flatTabActive .flatTabIcon {
+  background: rgba(15, 23, 42, 0.22);
+  color: #FFFFFF;
+}
+
+.flatTabText {
+  font-size: 0.78rem;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+/* Escenario dividido: ficha izquierda + simulador POS derecha */
+.consoleStage {
+  display: grid;
+  grid-template-columns: 0.85fr 1.15fr;
+  gap: 1.75rem;
+  align-items: stretch;
+}
+
+.stageSidebar {
+  background: #FFFFFF;
+  border: 2.5px solid #0F172A;
+  border-radius: 16px;
+  padding: 2rem;
+  box-shadow: 8px 8px 0 #0F172A;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.stageBadgeRow {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.stageCode {
+  padding: 0.28rem 0.65rem;
+  border-radius: 5px;
+  background: #0F172A;
+  color: #FFFFFF;
+  font-family: var(--font-jetbrains), monospace;
+  font-size: 0.7rem;
+  font-weight: 800;
+}
+
+.stageCategory {
+  padding: 0.28rem 0.65rem;
+  border-radius: 5px;
+  background: var(--v-soft, #ECFDF5);
+  color: var(--v-color, #10B981);
+  font-family: var(--font-jetbrains), monospace;
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+}
+
+.stageTitleRow {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+}
+
+.stageBigIcon {
+  width: 50px;
+  height: 50px;
+  border-radius: 12px;
+  background: var(--v-color, #10B981);
+  color: #FFFFFF;
+  border: 2px solid #0F172A;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.stageTitle {
+  margin: 0;
+  font-family: var(--font-outfit), sans-serif;
+  font-size: 1.75rem;
+  font-weight: 900;
+  color: #0F172A;
+  line-height: 1.1;
+}
+
+.stageDesc {
+  margin: 0;
+  font-size: 0.98rem;
+  line-height: 1.65;
+  color: #475569;
+}
+
+.stageChecklist {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  padding-top: 0.5rem;
+  border-top: 2px dashed #E2E8F0;
+}
+
+.checklistHeading {
+  font-family: var(--font-jetbrains), monospace;
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  color: #64748B;
+}
+
+.checklistItem {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #0F172A;
+}
+
+.checklistBullet {
+  width: 22px;
+  height: 22px;
+  border-radius: 6px;
+  background: var(--v-soft, #ECFDF5);
+  color: var(--v-color, #10B981);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.nextVariantBtn {
+  margin-top: auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.85rem 1.1rem;
+  border-radius: 10px;
+  background: #F8FAFC;
+  border: 2px solid #0F172A;
+  color: #0F172A;
+  font-size: 0.85rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.15s ease, transform 0.15s ease;
+}
+
+.nextVariantBtn:hover {
+  background: var(--v-soft, #ECFDF5);
+  transform: translateX(3px);
+}
+
+/* ── Ventana POS Simulación (Material Flat) ── */
 .posWrapper {
-  flex: 1.3;
   width: 100%;
+  display: flex;
 }
 
 .posSimulation {
-  background: rgba(255, 255, 255, 0.85);
-  backdrop-filter: blur(20px);
-  border: 1px solid rgba(0, 0, 0, 0.05);
-  border-radius: 20px;
-  width: 100%;
-  overflow: hidden;
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.08);
   position: relative;
+  width: 100%;
+  min-height: 440px;
+  background: #FFFFFF;
+  border: 2.5px solid #0F172A;
+  border-radius: 16px;
+  box-shadow: 8px 8px 0 #0F172A;
+  overflow: hidden;
   display: flex;
   flex-direction: column;
-  min-height: 400px;
 }
 
 .posHeader {
-  background: rgba(248, 250, 252, 0.9);
-  padding: 1rem 1.5rem;
+  background: var(--v-color, #10B981);
+  color: #FFFFFF;
+  padding: 0.9rem 1.35rem;
+  border-bottom: 2.5px solid #0F172A;
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-  position: relative;
-  z-index: 20;
+  justify-content: space-between;
 }
 
 .posHeaderLeft {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  font-weight: 600;
-  color: #1E293B;
-  font-size: 0.9rem;
+  gap: 0.65rem;
+  font-size: 0.95rem;
 }
 
-.posControls {
+.posHeaderIcon {
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  background: rgba(15, 23, 42, 0.22);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.posHeaderCode {
+  padding: 0.15rem 0.5rem;
+  border-radius: 4px;
+  background: rgba(15, 23, 42, 0.25);
+  font-family: var(--font-jetbrains), monospace;
+  font-size: 0.68rem;
+  font-weight: 700;
+}
+
+.posHeaderStatus {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.25rem 0.65rem;
+  border-radius: 4px;
+  background: #0F172A;
+  color: #FFFFFF;
+  font-family: var(--font-jetbrains), monospace;
+  font-size: 0.66rem;
+  font-weight: 800;
+}
+
+.posOnlineDot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #10B981;
+}
+
+.posSubhead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: var(--font-jetbrains), monospace;
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  color: #64748B;
+  margin-bottom: 0.85rem;
+}
+
+.clearLink {
+  border: none;
+  background: #FEE2E2;
+  color: #B91C1C;
+  padding: 0.2rem 0.55rem;
+  border-radius: 4px;
+  font-size: 0.68rem;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+/* =========================================
+   1. ABARROTES (Material Flat)
+========================================= */
+.abarrotesBody {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr;
+  flex: 1;
+}
+
+.abarrotesMain {
+  padding: 1.35rem;
+  background: #F8FAFC;
+}
+
+.abarrotesSidebar {
+  background: #FFFFFF;
+  padding: 1.35rem;
+  border-left: 2px solid #0F172A;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.productGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.75rem;
+}
+
+.productCard {
+  background: #FFFFFF;
+  border: 2px solid #0F172A;
+  border-radius: 10px;
+  padding: 0.85rem 0.65rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4rem;
+  cursor: pointer;
+  box-shadow: 3px 3px 0 #0F172A;
+  transition: transform 0.12s ease, background 0.12s ease;
+}
+
+.productCard:hover {
+  background: #ECFDF5;
+  transform: translate(-1px, -1px);
+}
+
+.productCard:active {
+  transform: translate(2px, 2px);
+  box-shadow: 1px 1px 0 #0F172A;
+}
+
+.productIcon {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  background: #10B981;
+  color: #FFFFFF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.productName {
+  font-size: 0.76rem;
+  font-weight: 800;
+  text-align: center;
+  color: #0F172A;
+}
+
+.productPrice {
+  font-family: var(--font-jetbrains), monospace;
+  font-size: 0.82rem;
+  font-weight: 800;
+  color: #059669;
+}
+
+.ticketHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 0.55rem;
+  border-bottom: 2px solid #0F172A;
+  font-family: var(--font-jetbrains), monospace;
+  font-size: 0.78rem;
+}
+
+.ticketScroll {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  max-height: 190px;
+  overflow-y: auto;
+}
+
+.ticketEmpty {
+  color: #94A3B8;
+  text-align: center;
+  margin: auto 0;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.ticketItem {
+  display: flex;
+  justify-content: space-between;
+  padding-bottom: 0.4rem;
+  border-bottom: 1px dashed #CBD5E1;
+  font-size: 0.8rem;
+  color: #1E293B;
+}
+
+.totalRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: var(--font-jetbrains), monospace;
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: #0F172A;
+  padding-top: 0.65rem;
+  border-top: 2px solid #0F172A;
+}
+
+.payBtn {
+  border: 2px solid #0F172A;
+  background: #10B981;
+  color: #052E16;
+  font-family: var(--font-jetbrains), monospace;
+  font-size: 0.78rem;
+  font-weight: 800;
+  padding: 0.8rem;
+  border-radius: 8px;
+  text-align: center;
+  cursor: pointer;
+  box-shadow: 3px 3px 0 #0F172A;
+  transition: transform 0.12s ease, background 0.12s ease;
+}
+
+.payBtn:hover:not(.disabled) {
+  background: #34D399;
+}
+
+.payBtn.disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.printerOverlay {
+  position: absolute;
+  top: 52px;
+  left: 0;
+  width: 100%;
+  height: calc(100% - 52px);
+  background: rgba(15, 23, 42, 0.85);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 25;
+}
+
+.printedTicket {
+  width: 260px;
+  background: #FFFFFF;
+  color: #0F172A;
+  font-family: var(--font-jetbrains), monospace;
+  padding: 1.5rem;
+  font-size: 0.82rem;
+  border: 2px solid #0F172A;
+  box-shadow: 6px 6px 0 #10B981;
+}
+
+.printedTicketTitle {
+  font-size: 0.95rem;
+  font-weight: 800;
+  text-align: center;
+  margin-bottom: 0.85rem;
+  border-bottom: 2px solid #0F172A;
+  padding-bottom: 0.45rem;
+}
+
+.checkMarkWrapper {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  pointer-events: none;
+}
+
+.checkMarkContainer {
+  background: #FFFFFF;
+  padding: 1.75rem 2.25rem;
+  border-radius: 14px;
+  border: 2.5px solid #0F172A;
+  box-shadow: 8px 8px 0 #10B981;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.85rem;
+}
+
+.checkMarkCircle {
+  width: 68px;
+  height: 68px;
+  border-radius: 50%;
+  background: #10B981;
+  border: 2px solid #0F172A;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* =========================================
+   2. FERRETERÍA (Material Flat)
+========================================= */
+.ferreBody {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  padding: 1.5rem;
+  background: #F8FAFC;
+}
+
+.ferreCalcBox {
+  background: #FFFFFF;
+  border: 2px solid #0F172A;
+  border-radius: 12px;
+  padding: 1.35rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.15rem;
+  flex: 1;
+}
+
+.ferreHeader {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid #E2E8F0;
+}
+
+.ferreIcon {
+  width: 48px;
+  height: 48px;
+  background: #F59E0B;
+  color: #FFFFFF;
+  border: 2px solid #0F172A;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 10px;
+}
+
+.flatStockTag {
+  padding: 0.3rem 0.65rem;
+  border-radius: 6px;
+  background: #FEF3C7;
+  border: 1.5px solid #F59E0B;
+  color: #92400E;
+  font-family: var(--font-jetbrains), monospace;
+  font-size: 0.72rem;
+  font-weight: 800;
+}
+
+.ferreInputGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.ferreLabel {
+  font-family: var(--font-jetbrains), monospace;
+  font-size: 0.7rem;
+  font-weight: 800;
+  color: #64748B;
+  letter-spacing: 0.08em;
+}
+
+.ferreControlsRow {
   display: flex;
   gap: 0.5rem;
 }
 
-.posControlBtn {
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  background: #CBD5E1;
+.ferrePresetBtn {
+  padding: 0.4rem 0.85rem;
+  border-radius: 6px;
+  border: 2px solid #0F172A;
+  background: #FFFFFF;
+  font-family: var(--font-jetbrains), monospace;
+  font-size: 0.78rem;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.ferrePresetActive {
+  background: #F59E0B;
+  color: #FFFFFF;
+}
+
+.ferreInputWrap {
+  display: flex;
+  align-items: center;
+  border: 2px solid #0F172A;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #F8FAFC;
+}
+
+.ferreInput {
+  flex: 1;
+  border: none;
+  padding: 0.7rem 1rem;
+  font-family: var(--font-jetbrains), monospace;
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: #0F172A;
+  background: transparent;
+  outline: none;
+}
+
+.ferreUnit {
+  padding: 0.7rem 1.1rem;
+  font-family: var(--font-jetbrains), monospace;
+  font-size: 0.78rem;
+  font-weight: 800;
+  color: #0F172A;
+  background: #E2E8F0;
+  border-left: 2px solid #0F172A;
+}
+
+.ferreResult {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.15rem;
+  border-radius: 10px;
+  background: #FFFBEB;
+  border: 2px solid #0F172A;
+  margin-top: auto;
+}
+
+.ferreResultPrice {
+  font-family: var(--font-jetbrains), monospace;
+  font-size: 1.75rem;
+  font-weight: 900;
+  color: #D97706;
 }
 
 /* =========================================
-   1. ABARROTES
+   3. BOUTIQUE (Material Flat)
 ========================================= */
-.abarrotesBody {
+.boutiqueBody {
   display: grid;
-  grid-template-columns: 2fr 1fr;
-  gap: 1px;
+  grid-template-columns: 1fr 1.15fr;
+  gap: 1.5rem;
+  background: #F8FAFC;
+  padding: 1.5rem;
   flex: 1;
 }
-@media (max-width: 600px) { .abarrotesBody { grid-template-columns: 1fr; } }
-.abarrotesMain { background: rgba(255, 255, 255, 0.6); padding: 1.5rem; }
-.abarrotesSidebar { background: rgba(248, 250, 252, 1); padding: 1.5rem; display: flex; flex-direction: column; gap: 1rem; border-left: 1px solid rgba(0, 0, 0, 0.05); }
 
-.productGrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 1rem; }
-.productCard { background: #ffffff; border: 1px solid #E2E8F0; border-radius: 12px; padding: 1rem; display: flex; flex-direction: column; align-items: center; gap: 0.5rem; cursor: pointer; transition: all 0.2s ease; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); }
-.productCard:hover { background: #F0FDF4; border-color: #86EFAC; transform: translateY(-2px); box-shadow: 0 10px 15px -3px rgba(16, 185, 129, 0.1); }
-.productIcon { width: 40px; height: 40px; background: #F0FDF4; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #10B981; }
-.productName { font-size: 0.8rem; font-weight: 600; text-align: center; color: #1E293B; }
-.productPrice { font-size: 0.9rem; font-weight: 700; color: #10B981; }
+.boutiquePreview {
+  background: #FFFFFF;
+  border-radius: 12px;
+  border: 2px solid #0F172A;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  padding: 1.5rem;
+}
 
-.ticketItem { display: flex; justify-content: space-between; padding-bottom: 0.5rem; border-bottom: 1px dashed #CBD5E1; font-size: 0.85rem; color: #475569; }
-.totalRow { display: flex; justify-content: space-between; font-size: 1.1rem; font-weight: 700; color: #0F172A; margin-top: 1rem; padding-top: 1rem; border-top: 2px solid #E2E8F0; }
+.boutiqueSkuBadge {
+  padding: 0.28rem 0.65rem;
+  border-radius: 5px;
+  background: #0F172A;
+  color: #FFFFFF;
+  font-family: var(--font-jetbrains), monospace;
+  font-size: 0.68rem;
+  font-weight: 700;
+}
 
-.payBtn { background: #10B981; color: #ffffff; font-weight: 700; padding: 0.75rem; border-radius: 8px; text-align: center; cursor: pointer; margin-top: auto; transition: all 0.2s; box-shadow: 0 4px 6px rgba(16, 185, 129, 0.2); }
-.payBtn:hover:not(.disabled) { background: #059669; box-shadow: 0 10px 15px rgba(16, 185, 129, 0.3); }
-.payBtn.disabled { opacity: 0.5; cursor: not-allowed; box-shadow: none; }
+.boutiqueOptions {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  justify-content: center;
+}
 
-.printerOverlay { position: absolute; top: 50px; left: 0; width: 100%; height: calc(100% - 50px); background: rgba(248, 250, 252, 0.7); backdrop-filter: blur(8px); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 15; }
-.printedTicket { position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 260px; background: #fff; color: #000; font-family: monospace; padding: 2rem 1.5rem; font-size: 0.9rem; z-index: 16; box-shadow: 0 20px 40px rgba(0,0,0,0.15); border-bottom: 4px dashed #cbd5e1; border-left: 1px solid #e2e8f0; border-right: 1px solid #e2e8f0; }
-.printedTicketTitle { font-size: 1.1rem; font-weight: bold; text-align: center; margin-bottom: 1rem; border-bottom: 1px solid #000; padding-bottom: 0.5rem; }
-.checkMarkWrapper { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 20; display: flex; justify-content: center; align-items: center; width: 100%; height: 100%; pointer-events: none;}
-.checkMarkContainer { pointer-events: auto; background: rgba(255, 255, 255, 0.95); padding: 2rem; border-radius: 20px; border: 1px solid rgba(16, 185, 129, 0.2); box-shadow: 0 20px 50px rgba(0,0,0,0.1); display: flex; flex-direction: column; align-items: center; gap: 1rem; }
-.checkMarkCircle { width: 80px; height: 80px; border-radius: 50%; background: #10B981; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 30px rgba(16, 185, 129, 0.3); }
+.colorGroup,
+.sizeGroup {
+  display: flex;
+  gap: 0.55rem;
+}
 
-/* =========================================
-   2. FERRETERÍA (Calculadora Granel)
-========================================= */
-.ferreBody { display: flex; flex-direction: column; flex: 1; padding: 2rem; background: rgba(255,255,255,0.5); gap: 1.5rem; }
-.ferreHeader { display: flex; align-items: center; gap: 1rem; padding-bottom: 1rem; border-bottom: 1px solid #E2E8F0; }
-.ferreIcon { width: 50px; height: 50px; background: #FFFBEB; color: #F59E0B; display: flex; justify-content: center; align-items: center; border-radius: 12px; }
-.ferreCalcBox { background: #fff; border: 1px solid #E2E8F0; border-radius: 12px; padding: 1.5rem; display: flex; flex-direction: column; gap: 1rem; box-shadow: 0 4px 6px rgba(0,0,0,0.02); }
-.ferreInputGroup { display: flex; flex-direction: column; gap: 0.5rem; }
-.ferreLabel { font-size: 0.85rem; font-weight: 600; color: #64748B; text-transform: uppercase; }
-.ferreInputWrap { display: flex; align-items: center; border: 1px solid #CBD5E1; border-radius: 8px; overflow: hidden; background: #F8FAFC; }
-.ferreInput { flex: 1; border: none; padding: 0.75rem 1rem; font-size: 1rem; font-weight: 600; color: #0F172A; background: transparent; outline: none; }
-.ferreUnit { padding: 0 1rem; font-weight: 600; color: #94A3B8; background: #F1F5F9; border-left: 1px solid #CBD5E1; display: flex; align-items: center; height: 100%; }
-.ferreResult { display: flex; justify-content: space-between; align-items: center; padding-top: 1rem; border-top: 1px dashed #CBD5E1; margin-top: 0.5rem; }
-.ferreResultPrice { font-size: 1.5rem; font-weight: 800; color: #F59E0B; }
+.colorCircle {
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  cursor: pointer;
+  border: 2px solid #0F172A;
+  transition: transform 0.15s ease;
+}
 
-/* =========================================
-   3. BOUTIQUE
-========================================= */
-.boutiqueBody { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; background: rgba(255, 255, 255, 0.5); padding: 2rem; flex: 1; }
-@media (max-width: 600px) { .boutiqueBody { grid-template-columns: 1fr; } }
-.boutiquePreview { background: #ffffff; border-radius: 12px; display: flex; align-items: center; justify-content: center; border: 1px solid #E2E8F0; padding: 1.5rem; box-shadow: inset 0 2px 10px rgba(0,0,0,0.02); }
-.boutiqueOptions { display: flex; flex-direction: column; gap: 1.5rem; justify-content: center; }
-.colorGroup, .sizeGroup { display: flex; gap: 0.5rem; }
-.colorCircle { width: 30px; height: 30px; border-radius: 50%; cursor: pointer; border: 2px solid transparent; transition: all 0.2s; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-.colorCircle.active { border-color: #0F172A; transform: scale(1.1); }
-.sizeBtn { width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; border-radius: 8px; background: #ffffff; border: 1px solid #CBD5E1; font-size: 0.9rem; color: #475569; font-weight: 600; transition: all 0.2s; cursor: pointer; }
-.sizeBtn.active { background: #3B82F6; color: #fff; border-color: #3B82F6; box-shadow: 0 4px 6px rgba(59, 130, 246, 0.3); }
+.colorCircle.active {
+  transform: translateY(-3px);
+  box-shadow: 3px 3px 0 #0F172A;
+}
 
-/* =========================================
-   4. RESTAURANTES (Mapa Mesas)
-========================================= */
-.restauranteBody { display: grid; grid-template-columns: 2fr 1fr; gap: 1px; flex: 1; }
-@media (max-width: 600px) { .restauranteBody { grid-template-columns: 1fr; } }
-.restaMain { padding: 1.5rem; background: rgba(255, 255, 255, 0.6); display: flex; flex-direction: column; gap: 1rem; }
-.mesaGrid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
-.mesa { background: #fff; border: 2px solid #E2E8F0; border-radius: 12px; height: 80px; display: flex; flex-direction: column; justify-content: center; align-items: center; cursor: pointer; transition: all 0.2s; box-shadow: 0 4px 6px rgba(0,0,0,0.02); position: relative; }
-.mesa.active { border-color: #EF4444; background: #FEF2F2; box-shadow: 0 10px 15px -3px rgba(239, 68, 68, 0.2); }
-.mesa.occupied { border-color: #F87171; }
-.mesaNumber { font-weight: 700; color: #1E293B; font-size: 1.1rem; }
-.mesaStatus { font-size: 0.75rem; font-weight: 600; color: #94A3B8; text-transform: uppercase; }
-.mesa.occupied .mesaStatus { color: #EF4444; }
-.restaSidebar { background: #F8FAFC; border-left: 1px solid #E2E8F0; padding: 1.5rem; display: flex; flex-direction: column; }
-.comandaHeader { font-weight: 700; color: #0F172A; border-bottom: 2px solid #E2E8F0; padding-bottom: 0.5rem; margin-bottom: 1rem; }
-.comandaList { flex: 1; display: flex; flex-direction: column; gap: 0.75rem; }
-.comandaItem { display: flex; justify-content: space-between; font-size: 0.9rem; color: #475569; background: #fff; padding: 0.5rem; border-radius: 6px; border: 1px solid #E2E8F0; }
-.comandaItem span:last-child { font-weight: 600; color: #1E293B; }
-.comandaBtn { background: #EF4444; color: #fff; text-align: center; font-weight: 700; padding: 0.75rem; border-radius: 8px; cursor: pointer; margin-top: auto; transition: 0.2s; }
-.comandaBtn:hover { background: #DC2626; }
-.comandaBtn.disabled { opacity: 0.5; pointer-events: none; }
+.sizeBtn {
+  width: 44px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  background: #FFFFFF;
+  border: 2px solid #0F172A;
+  font-family: var(--font-jetbrains), monospace;
+  font-size: 0.84rem;
+  color: #0F172A;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.sizeBtn.active {
+  background: #3B82F6;
+  color: #FFFFFF;
+  box-shadow: 3px 3px 0 #0F172A;
+}
 
 /* =========================================
-   5. RETAIL (Dashboard)
+   4. RESTAURANTES (Material Flat)
 ========================================= */
-.retailBody { display: flex; flex-direction: column; gap: 1.5rem; padding: 1.5rem; flex: 1; background: rgba(255, 255, 255, 0.6); }
-.retailCards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
-.rCard { background: #fff; border: 1px solid #E2E8F0; border-radius: 12px; padding: 1rem; display: flex; flex-direction: column; gap: 0.5rem; box-shadow: 0 4px 6px rgba(0,0,0,0.02); position: relative; overflow: hidden; }
-.rCardTitle { font-size: 0.8rem; font-weight: 600; color: #64748B; text-transform: uppercase; }
-.rCardValue { font-size: 1.25rem; font-weight: 800; color: #0F172A; }
-.rCardTrend { font-size: 0.75rem; font-weight: 700; color: #10B981; display: flex; align-items: center; gap: 0.25rem; }
-.rChartPlaceholder { height: 120px; background: #fff; border: 1px solid #E2E8F0; border-radius: 12px; padding: 1rem; display: flex; align-items: flex-end; gap: 4px; }
-.rBar { flex: 1; background: #F1F5F9; border-radius: 4px 4px 0 0; position: relative; }
-.rBarFill { position: absolute; bottom: 0; left: 0; width: 100%; background: #8B5CF6; border-radius: 4px 4px 0 0; transition: height 0.5s ease; }
+.restauranteBody {
+  display: grid;
+  grid-template-columns: 1.45fr 1fr;
+  flex: 1;
+}
+
+.restaMain {
+  padding: 1.35rem;
+  background: #F8FAFC;
+  display: flex;
+  flex-direction: column;
+}
+
+.mesaGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.85rem;
+  flex: 1;
+}
+
+.mesa {
+  background: #FFFFFF;
+  border: 2px solid #0F172A;
+  border-radius: 10px;
+  padding: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 0.2rem;
+  cursor: pointer;
+  box-shadow: 3px 3px 0 #0F172A;
+}
+
+.mesa.occupied {
+  background: #FEF2F2;
+}
+
+.mesa.active {
+  background: #EF4444;
+  color: #FFFFFF;
+}
+
+.mesaNumber {
+  font-family: var(--font-jetbrains), monospace;
+  font-weight: 800;
+  font-size: 0.92rem;
+}
+
+.mesaStatus {
+  font-size: 0.68rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  opacity: 0.8;
+}
+
+.mesaTotal {
+  font-family: var(--font-jetbrains), monospace;
+  font-size: 0.78rem;
+  font-weight: 800;
+  margin-top: 0.15rem;
+}
+
+.restaSidebar {
+  background: #FFFFFF;
+  border-left: 2px solid #0F172A;
+  padding: 1.35rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.comandaHeader {
+  font-family: var(--font-jetbrains), monospace;
+  font-size: 0.82rem;
+  font-weight: 800;
+  color: #0F172A;
+  border-bottom: 2px solid #0F172A;
+  padding-bottom: 0.55rem;
+  margin-bottom: 0.85rem;
+}
+
+.comandaList {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+}
+
+.comandaItem {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.82rem;
+  color: #0F172A;
+  background: #F8FAFC;
+  padding: 0.55rem 0.7rem;
+  border-radius: 6px;
+  border: 1.5px solid #CBD5E1;
+}
+
+.comandaBtn {
+  border: 2px solid #0F172A;
+  background: #EF4444;
+  color: #FFFFFF;
+  font-family: var(--font-jetbrains), monospace;
+  font-size: 0.78rem;
+  font-weight: 800;
+  padding: 0.8rem;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-top: auto;
+  box-shadow: 3px 3px 0 #0F172A;
+}
+
+.comandaBtn.disabled {
+  opacity: 0.4;
+  pointer-events: none;
+  box-shadow: none;
+}
 
 /* =========================================
-   6. FARMACIA (Buscador & Caducidad)
+   5. RETAIL (Material Flat)
 ========================================= */
-.farmaciaBody { display: flex; flex-direction: column; flex: 1; padding: 1.5rem; background: rgba(255,255,255,0.6); gap: 1rem; }
-.farmaSearch { display: flex; gap: 0.5rem; }
-.farmaInput { flex: 1; padding: 0.75rem 1rem; border-radius: 8px; border: 1px solid #CBD5E1; outline: none; background: #fff; font-size: 0.95rem; }
-.farmaBtn { padding: 0.75rem 1.5rem; background: #06B6D4; color: #fff; font-weight: 700; border-radius: 8px; cursor: pointer; transition: 0.2s; }
-.farmaBtn:hover { background: #0891B2; }
-.farmaTableBox { background: #fff; border: 1px solid #E2E8F0; border-radius: 12px; overflow: hidden; }
-.farmaTable { width: 100%; border-collapse: collapse; text-align: left; font-size: 0.85rem; }
-.farmaTable th { background: #F8FAFC; padding: 0.75rem 1rem; color: #64748B; font-weight: 600; text-transform: uppercase; border-bottom: 1px solid #E2E8F0; }
-.farmaTable td { padding: 0.75rem 1rem; border-bottom: 1px solid #F1F5F9; color: #1E293B; font-weight: 500; }
-.farmaTable tr:last-child td { border-bottom: none; }
-.farmaWarning { background: #FEF2F2 !important; }
-.farmaWarning td { color: #EF4444 !important; }
-.farmaTag { padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.75rem; font-weight: 700; }
-.farmaTagGood { background: #D1FAE5; color: #059669; }
-.farmaTagBad { background: #FEE2E2; color: #DC2626; }
+.retailBody {
+  display: flex;
+  flex-direction: column;
+  gap: 1.15rem;
+  padding: 1.35rem;
+  flex: 1;
+  background: #F8FAFC;
+}
+
+.retailCards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.85rem;
+}
+
+.rCard {
+  background: #FFFFFF;
+  border: 2px solid #0F172A;
+  border-radius: 10px;
+  padding: 0.9rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  box-shadow: 3px 3px 0 #0F172A;
+}
+
+.rCardTitle {
+  font-family: var(--font-jetbrains), monospace;
+  font-size: 0.66rem;
+  font-weight: 800;
+  color: #64748B;
+}
+
+.rCardValue {
+  font-family: var(--font-jetbrains), monospace;
+  font-size: 1.25rem;
+  font-weight: 900;
+  color: #0F172A;
+}
+
+.rCardTrend {
+  font-size: 0.74rem;
+  font-weight: 800;
+  color: #059669;
+}
+
+.rChartPlaceholder {
+  flex: 1;
+  min-height: 120px;
+  background: #FFFFFF;
+  border: 2px solid #0F172A;
+  border-radius: 10px;
+  padding: 1rem;
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+}
+
+.rBar {
+  flex: 1;
+  height: 100%;
+  background: #F1F5F9;
+  border-radius: 4px 4px 0 0;
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+}
+
+.rBarFill {
+  width: 100%;
+  background: #8B5CF6;
+  border: 1.5px solid #0F172A;
+  border-bottom: none;
+  border-radius: 4px 4px 0 0;
+}
 
 /* =========================================
-   7. PAPELERÍA (Escáner Mayoreo)
+   6. FARMACIA (Material Flat)
 ========================================= */
-.papeBody { display: flex; flex-direction: column; flex: 1; padding: 1.5rem; background: rgba(255,255,255,0.6); gap: 1rem; }
-.papeTop { display: flex; justify-content: space-between; align-items: center; background: #fff; padding: 1rem; border-radius: 12px; border: 1px solid #E2E8F0; }
-.papeScanBtn { background: #F43F5E; color: #fff; padding: 0.75rem 1.5rem; border-radius: 8px; font-weight: 700; display: flex; align-items: center; gap: 0.5rem; cursor: pointer; transition: 0.2s; }
-.papeScanBtn:hover { background: #E11D48; }
-.papeList { flex: 1; background: #fff; border: 1px solid #E2E8F0; border-radius: 12px; padding: 1rem; display: flex; flex-direction: column; gap: 0.5rem; overflow-y: auto; }
-.papeItem { display: flex; justify-content: space-between; align-items: center; padding: 0.75rem; background: #F8FAFC; border-radius: 8px; border: 1px solid #E2E8F0; }
-.papeItemName { font-weight: 600; color: #1E293B; display: flex; align-items: center; gap: 0.5rem; }
-.papeItemPrice { font-weight: 700; color: #0F172A; }
-.papeQtyBadge { background: #E2E8F0; color: #475569; padding: 0.15rem 0.5rem; border-radius: 20px; font-size: 0.75rem; font-weight: 700; }
-.wholesaleAlert { background: #FEFCE8; border: 1px solid #FEF08A; padding: 0.75rem; border-radius: 8px; color: #854D0E; font-weight: 600; font-size: 0.9rem; text-align: center; margin-top: auto; }
+.farmaciaBody {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  padding: 1.35rem;
+  background: #F8FAFC;
+  gap: 1rem;
+}
+
+.farmaSearch {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.farmaInput {
+  width: 100%;
+  padding: 0.7rem 1rem 0.7rem 2.4rem;
+  border-radius: 8px;
+  border: 2px solid #0F172A;
+  outline: none;
+  background: #FFFFFF;
+  font-size: 0.88rem;
+  font-weight: 600;
+}
+
+.farmaTableBox {
+  background: #FFFFFF;
+  border: 2px solid #0F172A;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.farmaTable {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  font-size: 0.82rem;
+}
+
+.farmaTable th {
+  background: #0F172A;
+  padding: 0.7rem 1rem;
+  color: #FFFFFF;
+  font-family: var(--font-jetbrains), monospace;
+  font-size: 0.68rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.farmaTable td {
+  padding: 0.7rem 1rem;
+  border-bottom: 1.5px solid #E2E8F0;
+  color: #0F172A;
+}
+
+.farmaTable tr:last-child td {
+  border-bottom: none;
+}
+
+.farmaWarning {
+  background: #FEF2F2;
+}
+
+.farmaTag {
+  padding: 0.22rem 0.55rem;
+  border-radius: 4px;
+  font-family: var(--font-jetbrains), monospace;
+  font-size: 0.68rem;
+  font-weight: 800;
+  border: 1.5px solid currentColor;
+}
+
+.farmaTagGood {
+  background: #D1FAE5;
+  color: #047857;
+}
+
+.farmaTagWarn {
+  background: #FEF3C7;
+  color: #B45309;
+}
+
+.farmaTagBad {
+  background: #FEE2E2;
+  color: #B91C1C;
+}
 
 /* =========================================
-   8. SALÓN (Agenda & Comisiones)
+   7. PAPELERÍA (Material Flat)
 ========================================= */
-.salonBody { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; padding: 1.5rem; flex: 1; background: rgba(255,255,255,0.6); }
-@media (max-width: 600px) { .salonBody { grid-template-columns: 1fr; } }
-.salonPanel { background: #fff; border: 1px solid #E2E8F0; border-radius: 12px; padding: 1.5rem; display: flex; flex-direction: column; gap: 1rem; }
-.salonTitle { font-size: 1rem; font-weight: 700; color: #0F172A; margin: 0; padding-bottom: 0.5rem; border-bottom: 1px solid #E2E8F0; }
-.agendaList { display: flex; flex-direction: column; gap: 0.75rem; }
-.agendaItem { display: flex; align-items: center; gap: 1rem; padding: 0.75rem; background: #F8FAFC; border-radius: 8px; border-left: 4px solid #EC4899; }
-.agendaTime { font-size: 0.85rem; font-weight: 700; color: #475569; }
-.agendaInfo { display: flex; flex-direction: column; }
-.agendaClient { font-weight: 600; color: #1E293B; font-size: 0.95rem; }
-.agendaService { font-size: 0.8rem; color: #94A3B8; }
-.commissionChart { flex: 1; display: flex; align-items: flex-end; gap: 1rem; padding-top: 1rem; }
-.commColumn { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 0.5rem; }
-.commBarWrap { width: 100%; height: 150px; background: #F1F5F9; border-radius: 6px 6px 0 0; position: relative; display: flex; align-items: flex-end; }
-.commBar { width: 100%; background: #EC4899; border-radius: 6px 6px 0 0; transition: height 0.5s ease; }
-.commLabel { font-size: 0.8rem; font-weight: 600; color: #475569; }
+.papeBody {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  padding: 1.35rem;
+  background: #F8FAFC;
+  gap: 0.9rem;
+}
 
-/* ── CTA / EN DESARROLLO ── */
-.ctaSection { width: 100%; max-width: 1100px; margin: 0 auto; padding: 2rem 3rem 6rem; }
+.papeTop {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #FFFFFF;
+  padding: 0.95rem 1.15rem;
+  border-radius: 10px;
+  border: 2px solid #0F172A;
+}
+
+.papeScanBtn {
+  border: 2px solid #0F172A;
+  background: #F43F5E;
+  color: #FFFFFF;
+  padding: 0.65rem 1.15rem;
+  border-radius: 8px;
+  font-family: var(--font-jetbrains), monospace;
+  font-size: 0.76rem;
+  font-weight: 800;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  cursor: pointer;
+  box-shadow: 3px 3px 0 #0F172A;
+}
+
+.papeList {
+  flex: 1;
+  background: #FFFFFF;
+  border: 2px solid #0F172A;
+  border-radius: 10px;
+  padding: 0.85rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.papeItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.65rem 0.85rem;
+  background: #F8FAFC;
+  border-radius: 8px;
+  border: 1.5px solid #CBD5E1;
+}
+
+.papeItemName {
+  font-weight: 700;
+  color: #0F172A;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 0.88rem;
+}
+
+.papeItemPrice {
+  font-family: var(--font-jetbrains), monospace;
+  font-weight: 800;
+  color: #0F172A;
+}
+
+.papeQtyBadge {
+  background: #0F172A;
+  color: #FFFFFF;
+  padding: 0.15rem 0.5rem;
+  border-radius: 4px;
+  font-family: var(--font-jetbrains), monospace;
+  font-size: 0.72rem;
+  font-weight: 800;
+}
+
+.wholesaleAlert {
+  background: #10B981;
+  border: 2px solid #0F172A;
+  padding: 0.65rem;
+  border-radius: 8px;
+  color: #052E16;
+  font-family: var(--font-jetbrains), monospace;
+  font-weight: 800;
+  font-size: 0.76rem;
+  text-align: center;
+}
+
+/* =========================================
+   8. SALÓN (Material Flat)
+========================================= */
+.salonBody {
+  display: grid;
+  grid-template-columns: 1.15fr 0.85fr;
+  gap: 1rem;
+  padding: 1.35rem;
+  flex: 1;
+  background: #F8FAFC;
+}
+
+.salonPanel {
+  background: #FFFFFF;
+  border: 2px solid #0F172A;
+  border-radius: 10px;
+  padding: 1.15rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.salonTitle {
+  font-family: var(--font-jetbrains), monospace;
+  font-size: 0.75rem;
+  font-weight: 800;
+  color: #0F172A;
+  margin: 0;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid #0F172A;
+}
+
+.agendaList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+}
+
+.agendaItem {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.6rem 0.75rem;
+  background: #F8FAFC;
+  border-radius: 6px;
+  border: 1.5px solid #CBD5E1;
+  border-left: 5px solid #EC4899;
+}
+
+.agendaTime {
+  font-family: var(--font-jetbrains), monospace;
+  font-size: 0.76rem;
+  font-weight: 800;
+  color: #0F172A;
+}
+
+.agendaInfo {
+  display: flex;
+  flex-direction: column;
+}
+
+.agendaClient {
+  font-weight: 800;
+  color: #0F172A;
+  font-size: 0.85rem;
+}
+
+.agendaService {
+  font-size: 0.74rem;
+  color: #64748B;
+  font-weight: 600;
+}
+
+.commissionChart {
+  flex: 1;
+  display: flex;
+  align-items: flex-end;
+  gap: 0.85rem;
+  padding-top: 0.5rem;
+}
+
+.commColumn {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.commBarWrap {
+  width: 100%;
+  height: 135px;
+  background: #F1F5F9;
+  border: 1.5px solid #CBD5E1;
+  border-radius: 6px 6px 0 0;
+  display: flex;
+  align-items: flex-end;
+  overflow: hidden;
+}
+
+.commBar {
+  width: 100%;
+  border-top: 2px solid #0F172A;
+  transition: height 0.4s ease;
+}
+
+.commLabel {
+  font-size: 0.78rem;
+  font-weight: 800;
+  color: #0F172A;
+}
+
+/* ── 4. CTA / EN DESARROLLO (Normal, limpio y sin borde) ── */
+.ctaSection {
+  width: 100%;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 2rem 3rem 6rem;
+}
+
 .ctaBox {
-  background: transparent; padding: 0;
-  display: flex; flex-direction: row; align-items: center; justify-content: space-between;
-  position: relative; min-height: 350px; gap: 4rem;
+  background: transparent;
+  padding: 0;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+  min-height: 350px;
+  gap: 4rem;
 }
+
 .ctaDevContent {
-  padding: 2rem 0; flex: 1.2; display: flex; flex-direction: column; align-items: flex-start; gap: 1.5rem;
-  min-width: 450px;
+  padding: 2rem 0;
+  flex: 1.2;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1.5rem;
 }
+
+.ctaBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.35rem 0.85rem;
+  border-radius: 999px;
+  background: rgba(16, 185, 129, 0.1);
+  border: 1px solid rgba(16, 185, 129, 0.2);
+  font-family: var(--font-jetbrains), monospace;
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #10B981;
+}
+
+.devDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  display: inline-block;
+  background: #10B981;
+  box-shadow: 0 0 10px #10B981;
+}
+
+.ctaTitle {
+  font-size: clamp(2rem, 3.5vw, 3rem);
+  font-weight: 900;
+  color: #0F172A;
+  letter-spacing: -0.03em;
+  margin: 0;
+}
+
+.ctaDesc {
+  font-size: 1.1rem;
+  color: #475569;
+  line-height: 1.7;
+  max-width: 480px;
+  margin: 0;
+}
+
 .ctaDevImage {
-  flex: 0.8; min-height: 350px; display: flex; align-items: center; justify-content: flex-end;
-  background: transparent; position: relative;
+  flex: 0.8;
+  min-height: 350px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  background: transparent;
+  position: relative;
 }
+
 .chuyImage {
-  width: 120%; max-width: none; min-width: 500px; height: auto; object-fit: contain;
-  transform: scale(1.1) translateX(15%); transform-origin: center right;
-  filter: drop-shadow(0 20px 40px rgba(0,0,0,0.1));
+  width: 115%;
+  max-width: 500px;
+  height: auto;
+  object-fit: contain;
+  filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.1));
   animation: floatChuy 6s ease-in-out infinite;
 }
-@keyframes floatChuy {
-  0%, 100% { transform: translateY(0) scale(1.1) translateX(15%); }
-  50% { transform: translateY(-15px) scale(1.1) translateX(15%); }
-}
-.ctaBadge {
-  display: inline-flex; align-items: center; gap: 0.4rem;
-  padding: 0.35rem 0.85rem; border-radius: 999px; background: rgba(16,185,129,0.1);
-  font-family: monospace; font-size: 0.6rem; font-weight: 700;
-  letter-spacing: 0.06em; text-transform: uppercase; color: #10B981; position: relative; z-index: 1;
-  border: 1px solid rgba(16,185,129,0.2);
-}
-.ctaBadge .devDot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; background: #10B981; box-shadow: 0 0 10px #10B981; }
-.ctaTitle {
-  font-size: clamp(2rem, 3.5vw, 3rem); font-weight: 900; color: #0F172A;
-  letter-spacing: -0.03em; margin: 0; position: relative; z-index: 1;
-}
-.ctaDesc { font-size: 1.1rem; color: #475569; line-height: 1.7; max-width: 480px; margin: 0; position: relative; z-index: 1; }
 
-@media (max-width: 768px) {
-  .ctaBox { flex-direction: column; text-align: center; gap: 2rem; }
-  .ctaDevContent { min-width: auto; align-items: center; padding: 1rem 0; }
-  .ctaDevImage { justify-content: center; }
+@keyframes floatChuy {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-14px);
+  }
+}
+
+/* ── Responsive ── */
+@media (max-width: 1100px) {
+  .heroGrid,
+  .consoleStage,
+  .flatBentoGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .tabsRail {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+@media (max-width: 680px) {
+  .hero {
+    padding: 1.25rem 1.25rem 2.25rem;
+  }
+
+  .philosophySection,
+  .consoleSection,
+  .ctaSection {
+    padding-left: 1.25rem;
+    padding-right: 1.25rem;
+  }
+
+  .kpiStrip {
+    grid-template-columns: 1fr;
+  }
+
+  .tabsRail {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .terminalBar,
+  .posHeader {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  .terminalBody,
+  .abarrotesBody,
+  .boutiqueBody,
+  .restauranteBody,
+  .salonBody,
+  .retailCards {
+    grid-template-columns: 1fr;
+  }
+
+  .productGrid,
+  .mesaGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .ferreHeader,
+  .papeTop,
+  .ferreResult {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+
+  .ferreControlsRow {
+    flex-wrap: wrap;
+  }
+
+  .farmaTableBox {
+    overflow-x: auto;
+  }
+
+  .abarrotesSidebar,
+  .restaSidebar {
+    border-left: none;
+    border-top: 2px solid #0F172A;
+  }
+
+  .stageSidebar {
+    padding: 1.35rem;
+  }
+
+  .ctaBox {
+    flex-direction: column;
+    padding: 1.5rem 0;
+    text-align: center;
+    gap: 2rem;
+  }
+
+  .ctaDevContent {
+    align-items: center;
+  }
+
+  .ctaDevImage {
+    min-height: 240px;
+    justify-content: center;
+  }
+
+  .chuyImage {
+    width: 100%;
+    max-width: 320px;
+  }
 }

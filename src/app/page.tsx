@@ -1,120 +1,86 @@
-"use client";
-
-import { useEffect, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-import styles from "./Home.module.css";
 import {
   Globe, Monitor, Smartphone, Database, Brain, Cpu, Cloud, Briefcase, Layers,
 } from "lucide-react";
+import HeroTech from "@/components/HeroTech/HeroTech";
+import TechMarqueeSection from "@/components/TechMarqueeSection";
 import ServicesAccordion from "@/components/ServicesAccordion/ServicesAccordion";
 import ProductsZigZag from "@/components/ProductsZigZag/ProductsZigZag";
 import PrinciplesFanScroll from "@/components/PrinciplesFanScroll/PrinciplesFanScroll";
-import TechMarqueeSection from "@/components/TechMarqueeSection";
-import HeroTech from "@/components/HeroTech/HeroTech";
+import ScrollTriggerRefresh from "@/components/ScrollTriggerRefresh";
+import styles from "./Home.module.css";
 
-gsap.registerPlugin(ScrollTrigger);
+const services = [
+  { title: "Sitios Web",              icon: <Globe size={32} /> },
+  { title: "Sistemas Web",            icon: <Monitor size={32} /> },
+  { title: "Apps Móviles",            icon: <Smartphone size={32} /> },
+  { title: "Business Intelligence",   icon: <Database size={32} /> },
+  { title: "Inteligencia Artificial", icon: <Brain size={32} /> },
+  { title: "Automatización (RPA)",    icon: <Cpu size={32} /> },
+  { title: "Cloud y DevOps",          icon: <Cloud size={32} /> },
+  { title: "Consultoría IT",          icon: <Briefcase size={32} /> },
+  { title: "Plataformas SaaS",        icon: <Layers size={32} /> },
+];
 
+/**
+ * Página de inicio. Es un Server Component: solo las secciones animadas
+ * (hero, acordeón, productos) se envían como JavaScript al navegador.
+ */
 export default function Home() {
-  const containerRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const ctx = gsap.context(() => {
-      const timer = setTimeout(() => {
-        ScrollTrigger.sort();
-        ScrollTrigger.refresh();
-      }, 600);
-      return () => clearTimeout(timer);
-    }, containerRef);
-
-    return () => ctx.revert();
-  }, []);
-
-  const ctaHeadlineText = "¿Listo para transformar tu negocio?";
-
-  const services = [
-    { title: "Sitios Web",              icon: <Globe size={32} /> },
-    { title: "Sistemas Web",            icon: <Monitor size={32} /> },
-    { title: "Apps Móviles",            icon: <Smartphone size={32} /> },
-    { title: "Business Intelligence",   icon: <Database size={32} /> },
-    { title: "Inteligencia Artificial", icon: <Brain size={32} /> },
-    { title: "Automatización (RPA)",    icon: <Cpu size={32} /> },
-    { title: "Cloud y DevOps",          icon: <Cloud size={32} /> },
-    { title: "Consultoría IT",          icon: <Briefcase size={32} /> },
-    { title: "Plataformas SaaS",        icon: <Layers size={32} /> },
-  ];
-
   return (
-    <div ref={containerRef}>
+    <>
+      <ScrollTriggerRefresh />
 
-      {/* 1. HERO TECH — Radar / HUD style, GSAP, award-level */}
+      {/* 1. Hero */}
       <HeroTech />
 
-      {/* 2. TECH MARQUEE */}
+      {/* 2. Tecnologías */}
       <TechMarqueeSection />
 
-      {/* 3. SERVICIOS */}
+      {/* 3. Servicios */}
       <section
         id="servicios-section"
         className={`${styles.section} ${styles.sectionPurple}`}
-        style={{ overflow: "hidden", paddingTop: "4rem" }}
       >
-        <div className="max-w-7xl mx-auto px-4 w-full bg-transparent">
+        <div className="max-w-7xl mx-auto px-4 w-full">
           <div className={styles.sectionHeader}>
-            <h2 className={`${styles.sectionTitle} ${styles.textWhite}`}>
-              Lo que hacemos
-            </h2>
+            <h2 className={styles.sectionTitle}>Lo que hacemos</h2>
           </div>
-          <div className="services-anim">
-            <ServicesAccordion services={services} />
-          </div>
-          {/* Omitimos el botón secundario aquí porque lo vamos a meter dentro del acordeón como pidió el usuario */}
+          <ServicesAccordion services={services} />
         </div>
       </section>
 
-      {/* 4. PRODUCTOS */}
+      {/* 4. Productos */}
       <ProductsZigZag />
 
-      {/* 5. POR QUÉ INFOCOD */}
+      {/* 5. Por qué Infocod */}
       <PrinciplesFanScroll />
 
-      {/* 6. CTA FINAL */}
-      <section id="cta-final-section" className={styles.ctaCleanSection}>
-        <div className={styles.ctaCleanContainer}>
-          <div className={styles.ctaCleanLeft}>
-            <h2 className={styles.ctaHeadline}>
-              {ctaHeadlineText.split(" ").map((word, wIdx) => (
-                <span
-                  key={wIdx}
-                  style={{ display: "inline-block", whiteSpace: "nowrap", marginRight: "0.35em" }}
-                >
-                  {word.split("").map((char, cIdx) => (
-                    <span key={cIdx} className="cta-split-char" style={{ display: "inline-block" }}>
-                      {char}
-                    </span>
-                  ))}
-                </span>
-              ))}
-            </h2>
-            <Link href="/contacto" className={styles.ctaButtonClean}>
-              Contáctanos
-            </Link>
-          </div>
-          <div className={styles.ctaCleanRight}>
+      {/* 6. CTA final con ultimo.jpg integrado suavemente con la sección anterior */}
+      <section id="cta-final-section" className={styles.ctaSection}>
+        <div className={styles.ctaCard}>
+          <div className={styles.ctaBgWrapper} aria-hidden="true">
             <Image
-              src="/images/chuy_contac.png"
-              alt="Zorro Chuy - Contacto Infocod"
-              width={440}
-              height={440}
-              className={styles.chuyContactImg}
-              priority
+              src="/inicio/ultimo.jpg"
+              alt="Chuy despegando con jetpack - Transforma tu negocio con Infocod"
+              fill
+              sizes="(max-width: 1360px) 96vw, 1320px"
+              className={styles.ctaBgImg}
             />
+            <div className={styles.ctaOverlay} />
+          </div>
+
+          <div className={styles.ctaContainer}>
+            <div className={styles.ctaLeft}>
+              <h2 className={styles.ctaHeadline}>¿Listo para transformar tu negocio?</h2>
+              <Link href="/contacto" className={styles.ctaButton}>
+                Contáctanos
+              </Link>
+            </div>
           </div>
         </div>
       </section>
-
-    </div>
+    </>
   );
 }

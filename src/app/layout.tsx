@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Sora, Manrope, JetBrains_Mono, Bebas_Neue, Fraunces, Outfit } from "next/font/google";
+import { Sora, Manrope, JetBrains_Mono, Outfit } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar/Navbar";
 import Footer from "@/components/Footer/Footer";
@@ -22,18 +22,6 @@ const jetbrainsMono = JetBrains_Mono({
   variable: "--font-jetbrains",
 });
 
-const bebasNeue = Bebas_Neue({
-  subsets: ["latin"],
-  variable: "--font-bebas",
-  weight: ["400"],
-});
-
-const fraunces = Fraunces({
-  subsets: ["latin"],
-  variable: "--font-fraunces",
-  style: ["italic", "normal"],
-});
-
 const outfit = Outfit({
   subsets: ["latin"],
   variable: "--font-outfit",
@@ -52,7 +40,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="es" className={`${sora.variable} ${manrope.variable} ${jetbrainsMono.variable} ${bebasNeue.variable} ${fraunces.variable} ${outfit.variable} antialiased scroll-smooth`}>
+    <html lang="es" className={`${sora.variable} ${manrope.variable} ${jetbrainsMono.variable} ${outfit.variable} antialiased`}>
       <body className="min-h-screen bg-[#F5F7FA] text-[#2E3440] selection:bg-[#4F8EF7] selection:text-white flex flex-col font-sans">
         <SecurityRules />
         <Navbar />

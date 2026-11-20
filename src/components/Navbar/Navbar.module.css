@@ -44,12 +44,21 @@
 }
 
 .navbarWhite {
-  background-color: #ffffff !important;
+  background-color: rgba(255, 255, 255, 0.94) !important;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-bottom: 1px solid rgba(15, 23, 42, 0.06);
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08) !important;
 }
 
 .navbarLightTop {
-  background-color: transparent !important;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.96) 0%,
+    rgba(255, 255, 255, 0.78) 55%,
+    rgba(255, 255, 255, 0) 100%
+  ) !important;
+  border-bottom: none !important;
   box-shadow: none !important;
 }
 
@@ -97,18 +106,20 @@
   align-items: center;
   width: 100%;
   max-width: 1300px;
-  padding: 0 2rem;
+  padding: 0 1.25rem;
+  box-sizing: border-box;
 }
 
 .logoContainer {
   display: flex;
   align-items: center;
+  flex-shrink: 0;
 }
 
 .logo {
-  height: 60px;
+  height: 54px;
   width: auto;
-  max-width: 250px;
+  max-width: 180px;
   object-fit: contain;
   /* Convertir el logo a blanco puro para que contraste en el fondo negro */
   filter: brightness(0) invert(1);
@@ -283,11 +294,19 @@
 /* Mobile Menu Toggle */
 .mobileMenuBtn {
   display: none;
-  background: none;
-  border: none;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid rgba(15, 23, 42, 0.12);
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.08);
   cursor: pointer;
-  padding: 0.5rem;
-  color: white;
+  padding: 0;
+  color: #0f172a !important;
+  flex-shrink: 0;
+  z-index: 1002;
 }
 
 @media (max-width: 1024px) {
@@ -296,7 +315,7 @@
   }
   
   .mobileMenuBtn {
-    display: block;
+    display: inline-flex;
   }
   
   .ctaButton {

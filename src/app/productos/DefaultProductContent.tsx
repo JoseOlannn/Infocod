@@ -192,7 +192,7 @@ export default function DefaultProductContent({ active, isTransitioning }: { act
               alt={active.name}
               fill
               className={styles.heroImg}
-              priority
+              preload
             />
             {/* Floating label */}
             <div className={styles.heroLabel}>

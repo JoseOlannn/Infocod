@@ -196,7 +196,7 @@ export default function ProductsZigZag() {
                       style={{ transform: `scale(${product.imgScale || 1})` }}
                       width={800}
                       height={600}
-                      unoptimized
+                      sizes="(max-width: 768px) 90vw, 50vw"
                     />
                   </div>
 

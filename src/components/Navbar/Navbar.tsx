@@ -126,7 +126,7 @@ export default function Navbar() {
               width={200} 
               height={80}
               className={styles.logo}
-              priority
+              preload
             />
           </Link>
         </div>
@@ -187,15 +187,31 @@ export default function Navbar() {
         </button>
       </div>
 
-      {/* Basic mobile menu structure placeholder if needed */}
+      {/* Menú móvil completo con Productos incluidos */}
       {mobileMenuOpen && (
-        <div className="lg:hidden absolute top-[80px] left-0 w-full bg-white shadow-xl border-t border-slate-100 p-6 flex flex-col gap-4">
-          <Link href="/" className="font-medium text-slate-800" onClick={() => setMobileMenuOpen(false)}>Inicio</Link>
-          <Link href="/nosotros" className="font-medium text-slate-800" onClick={() => setMobileMenuOpen(false)}>Nosotros</Link>
-          <Link href="/servicios" className="font-medium text-slate-800" onClick={() => setMobileMenuOpen(false)}>Servicios</Link>
+        <div className="lg:hidden absolute top-[80px] left-0 w-full bg-white/95 backdrop-blur-md shadow-xl border-t border-slate-100 p-6 flex flex-col gap-3.5 max-h-[calc(100vh-80px)] overflow-y-auto">
+          <Link href="/" className="font-semibold text-slate-800 py-1" onClick={() => setMobileMenuOpen(false)}>Inicio</Link>
+          <Link href="/nosotros" className="font-semibold text-slate-800 py-1" onClick={() => setMobileMenuOpen(false)}>Nosotros</Link>
+          <Link href="/servicios" className="font-semibold text-slate-800 py-1" onClick={() => setMobileMenuOpen(false)}>Servicios</Link>
 
-          <Link href="/contacto" className="font-medium text-slate-800" onClick={() => setMobileMenuOpen(false)}>Contacto</Link>
-          <Link href="/contacto" className="bg-blue-600 text-white p-3 rounded-lg text-center font-bold mt-4" onClick={() => setMobileMenuOpen(false)}>
+          <div className="border-y border-slate-100 py-2.5 flex flex-col gap-2">
+            <span className="text-xs font-mono uppercase tracking-wider text-slate-400">Productos</span>
+            <Link href="/productos?p=agenda" className="font-semibold text-slate-800 pl-2 py-0.5 flex items-center justify-between" onClick={() => setMobileMenuOpen(false)}>
+              <span>Agenda+</span>
+              <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-700 font-bold">EN VIVO</span>
+            </Link>
+            <Link href="/productos?p=masticod" className="font-semibold text-slate-800 pl-2 py-0.5 flex items-center justify-between" onClick={() => setMobileMenuOpen(false)}>
+              <span>Masticod</span>
+              <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-slate-100 text-slate-600 font-bold">PRONTO</span>
+            </Link>
+            <Link href="/productos?p=datapilot" className="font-semibold text-slate-800 pl-2 py-0.5 flex items-center justify-between" onClick={() => setMobileMenuOpen(false)}>
+              <span>DataPilot</span>
+              <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-slate-100 text-slate-600 font-bold">PRONTO</span>
+            </Link>
+          </div>
+
+          <Link href="/contacto" className="font-semibold text-slate-800 py-1" onClick={() => setMobileMenuOpen(false)}>Contacto</Link>
+          <Link href="/contacto" className="bg-slate-900 text-white p-3 rounded-lg text-center font-bold mt-2" onClick={() => setMobileMenuOpen(false)}>
             Cotiza tu proyecto
           </Link>
         </div>
