@@ -94,7 +94,7 @@ export default function NosotrosSPA() {
             </div>
             <div className={`${styles.mascotRight} mascotRight`}>
               <div className={styles.mascotFloat}>
-                <Image src="/nosotros/quienes somos.png" alt="Zorro Chuy (Feliz)" fill style={{ objectFit: 'contain', objectPosition: 'bottom' }} unoptimized />
+                <Image src="/nosotros/quienes somos.png" alt="Zorro Chuy (Feliz)" fill loading="eager" style={{ objectFit: 'contain', objectPosition: 'bottom' }} unoptimized />
               </div>
             </div>
           </>

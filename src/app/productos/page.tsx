@@ -8,6 +8,7 @@ import DefaultProductContent from './DefaultProductContent';
 import AgendaPlusContent from './AgendaPlusContent';
 import MasticodContent from './MasticodContent';
 import DataPilotContent from './DataPilotContent';
+import CVForgeContent from './CVForgeContent';
 import styles from './Productos.module.css';
 
 if (typeof window !== 'undefined') {
@@ -47,6 +48,14 @@ const PRODUCTS = [
     desc: 'Analítica avanzada y visualización de datos para impulsar el crecimiento de tu negocio de forma inteligente.',
     color: '#10B981',
     image: '/datapilotmock.png',
+  },
+  {
+    id: 'cvforge',
+    name: 'CVforge',
+    title: 'Currículums que superan los filtros de IA',
+    desc: 'Crea currículums estratégicos diseñados para destacar y superar los filtros automáticos de inteligencia artificial (ATS).',
+    color: '#F59E0B',
+    image: '/productos/cvforge/cvchuy.png',
   }
 ];
 
@@ -98,6 +107,8 @@ function ProductSwitcherLogic() {
         <MasticodContent active={active} isTransitioning={isTransitioning} />
       ) : active.id === 'datapilot' ? (
         <DataPilotContent active={active} isTransitioning={isTransitioning} />
+      ) : active.id === 'cvforge' ? (
+        <CVForgeContent />
       ) : (
         <DefaultProductContent active={active} isTransitioning={isTransitioning} />
       )}

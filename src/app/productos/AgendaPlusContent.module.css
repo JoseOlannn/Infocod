@@ -138,6 +138,8 @@
 }
 
 .heroLogo {
+  width: 62px;
+  height: auto;
   object-fit: contain;
 }
 

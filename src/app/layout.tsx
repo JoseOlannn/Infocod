@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Sora, Manrope, JetBrains_Mono, Outfit } from "next/font/google";
+import { Sora, Manrope, JetBrains_Mono, Outfit, Newsreader, IBM_Plex_Sans, IBM_Plex_Mono } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar/Navbar";
 import Footer from "@/components/Footer/Footer";
@@ -28,6 +28,25 @@ const outfit = Outfit({
   weight: ["400", "700", "900"],
 });
 
+const newsreader = Newsreader({
+  subsets: ["latin"],
+  variable: "--font-newsreader",
+  weight: ["400", "500", "600"],
+  style: ["normal", "italic"],
+});
+
+const ibmPlexSans = IBM_Plex_Sans({
+  subsets: ["latin"],
+  variable: "--font-ibm-plex-sans",
+  weight: ["400", "500", "600", "700"],
+});
+
+const ibmPlexMono = IBM_Plex_Mono({
+  subsets: ["latin"],
+  variable: "--font-ibm-plex-mono",
+  weight: ["400", "500", "600"],
+});
+
 export const metadata: Metadata = {
   title: "Infocod | Sistemas de Información a Medida",
   description: "Desarrollo de sistemas de información con calidad asegurada. Creamos soluciones tecnológicas adaptadas a tus necesidades.",
@@ -40,7 +59,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="es" className={`${sora.variable} ${manrope.variable} ${jetbrainsMono.variable} ${outfit.variable} antialiased`}>
+    <html lang="es" className={`${sora.variable} ${manrope.variable} ${jetbrainsMono.variable} ${outfit.variable} ${newsreader.variable} ${ibmPlexSans.variable} ${ibmPlexMono.variable} antialiased`}>
       <body className="min-h-screen bg-[#F5F7FA] text-[#2E3440] selection:bg-[#4F8EF7] selection:text-white flex flex-col font-sans">
         <SecurityRules />
         <Navbar />

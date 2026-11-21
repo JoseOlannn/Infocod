@@ -162,6 +162,10 @@ export default function Navbar() {
                 <span className={styles.dropdownTitle}>DataPilot</span>
                 <span className={styles.badge}>PRONTO</span>
               </Link>
+              <Link href="/productos?p=cvforge" className={styles.dropdownLink}>
+                <span className={styles.dropdownTitle}>CVforge</span>
+                <span className={styles.badge}>PRONTO</span>
+              </Link>
             </div>
           </li>
 
@@ -206,6 +210,10 @@ export default function Navbar() {
             </Link>
             <Link href="/productos?p=datapilot" className="font-semibold text-slate-800 pl-2 py-0.5 flex items-center justify-between" onClick={() => setMobileMenuOpen(false)}>
               <span>DataPilot</span>
+              <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-slate-100 text-slate-600 font-bold">PRONTO</span>
+            </Link>
+            <Link href="/productos?p=cvforge" className="font-semibold text-slate-800 pl-2 py-0.5 flex items-center justify-between" onClick={() => setMobileMenuOpen(false)}>
+              <span>CVforge</span>
               <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-slate-100 text-slate-600 font-bold">PRONTO</span>
             </Link>
           </div>

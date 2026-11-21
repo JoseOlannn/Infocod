@@ -22,6 +22,14 @@ export default function AgendaPlusContent({ active, isTransitioning }: { active:
   const calRef = useRef<HTMLDivElement>(null);
   const kanbanRef = useRef<HTMLDivElement>(null);
 
+  // Sincronizar tema oscuro de Agenda+ en el Navbar
+  useEffect(() => {
+    document.documentElement.dataset.navTheme = 'agenda';
+    return () => {
+      delete document.documentElement.dataset.navTheme;
+    };
+  }, []);
+
   // Hero 3D & entrance animations
   useEffect(() => {
     if (isTransitioning) return;

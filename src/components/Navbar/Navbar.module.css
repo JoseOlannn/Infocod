@@ -80,7 +80,94 @@
 
 .navbarLightTop .mobileMenuBtn {
   color: #0f172a !important;
-}.navbarWhite .logo {
+}
+
+/* Tema papel editorial exclusivo para CVforge */
+:global(html[data-nav-theme="paper"]) .navbar,
+:global(html[data-nav-theme="paper"]) .navbarLightTop {
+  background: #F6F2EA !important;
+  border-bottom: 1px solid rgba(26, 23, 20, 0.08) !important;
+  box-shadow: none !important;
+}
+
+:global(html[data-nav-theme="paper"]) .navbarWhite {
+  background-color: rgba(246, 242, 234, 0.94) !important;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-bottom: 1px solid rgba(26, 23, 20, 0.1) !important;
+  box-shadow: 0 4px 18px rgba(26, 23, 20, 0.05) !important;
+}
+
+:global(html[data-nav-theme="paper"]) .dropdownMenu {
+  background: #FBF9F4;
+  border: 1px solid rgba(26, 23, 20, 0.12);
+  box-shadow: 0 14px 34px rgba(26, 23, 20, 0.1);
+}
+
+:global(html[data-nav-theme="paper"]) .dropdownLink {
+  color: #1A1714;
+}
+
+:global(html[data-nav-theme="paper"]) .dropdownLink:hover {
+  background-color: rgba(26, 23, 20, 0.05);
+}
+
+/* Tema oscuro exclusivo para Agenda+ */
+:global(html[data-nav-theme="agenda"]) .navbar,
+:global(html[data-nav-theme="agenda"]) .navbarLightTop {
+  background: #080A10 !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06) !important;
+  box-shadow: none !important;
+}
+
+:global(html[data-nav-theme="agenda"]) .navbarWhite {
+  background-color: rgba(8, 10, 16, 0.92) !important;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35) !important;
+}
+
+:global(html[data-nav-theme="agenda"]) .logo {
+  filter: brightness(0) invert(1) !important;
+}
+
+:global(html[data-nav-theme="agenda"]) .link,
+:global(html[data-nav-theme="agenda"]) .dropdownIcon,
+:global(html[data-nav-theme="agenda"]) .mobileMenuBtn {
+  color: #F8FAFC !important;
+}
+
+:global(html[data-nav-theme="agenda"]) .mobileMenuBtn {
+  background: rgba(255, 255, 255, 0.08) !important;
+  border-color: rgba(255, 255, 255, 0.14) !important;
+}
+
+:global(html[data-nav-theme="agenda"]) .link::after {
+  background: linear-gradient(90deg, #7C3AED 0%, #3B82F6 100%) !important;
+}
+
+:global(html[data-nav-theme="agenda"]) .dropdownMenu {
+  background: #0F121D;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 16px 38px rgba(0, 0, 0, 0.55);
+}
+
+:global(html[data-nav-theme="agenda"]) .dropdownLink {
+  color: #F8FAFC;
+}
+
+:global(html[data-nav-theme="agenda"]) .dropdownLink:hover {
+  background-color: rgba(255, 255, 255, 0.08);
+}
+
+:global(html[data-nav-theme="agenda"]) .badge {
+  color: #34D399;
+  background-color: rgba(16, 185, 129, 0.12);
+  border-color: rgba(52, 211, 153, 0.3);
+}
+
+.navbarWhite .logo {
   filter: brightness(0) !important;
 }
 
@@ -185,18 +272,20 @@
   top: 100%;
   left: 50%;
   transform: translateX(-50%) translateY(10px);
-  background: #000000; /* Matches navbar */
+  background: rgba(255, 255, 255, 0.98);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
   border-radius: 12px;
   padding: 0.5rem;
-  min-width: 200px;
-  box-shadow: 0 10px 40px rgba(0,0,0,0.8);
+  min-width: 215px;
+  box-shadow: 0 14px 36px rgba(15, 23, 42, 0.12);
   display: flex;
   flex-direction: column;
   gap: 0.25rem;
   opacity: 0;
   visibility: hidden;
   transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-  border: 1px solid rgba(255,255,255,0.1);
+  border: 1px solid rgba(15, 23, 42, 0.08);
 }
 
 .dropdownParent:hover .dropdownMenu {
@@ -256,32 +345,32 @@
 }
 
 .dropdownLink {
-  padding: 0.6rem 1rem;
+  padding: 0.6rem 0.9rem;
   text-decoration: none;
-  color: #ffffff; 
-  font-size: 0.95rem;
+  color: #0f172a;
+  font-size: 0.92rem;
   font-weight: 500;
   transition: all 0.2s ease;
   display: flex;
   align-items: center;
   justify-content: space-between;
   border-radius: 8px;
-  margin: 0 0.25rem;
+  margin: 0 0.15rem;
   gap: 1rem;
 }
 
 .dropdownLink:hover {
-  background-color: rgba(255, 255, 255, 0.08);
-  transform: translateX(4px);
+  background-color: rgba(15, 23, 42, 0.05);
+  transform: translateX(3px);
 }
 
 .badge {
-  background-color: transparent; 
-  color: #10B981; 
-  border: 1px solid #10B981;
+  background-color: rgba(16, 185, 129, 0.1);
+  color: #047857;
+  border: 1px solid rgba(16, 185, 129, 0.28);
   font-size: 0.6rem;
-  font-weight: 600;
-  padding: 0.15rem 0.4rem;
+  font-weight: 700;
+  padding: 0.15rem 0.45rem;
   border-radius: 4px;
   text-transform: uppercase;
   letter-spacing: 0.5px;

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from 'react';
+import { useLayoutEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import gsap from 'gsap';
@@ -48,6 +48,18 @@ const products = [
     link: "/productos?p=datapilot",
     imgScale: 1.05,
     colorVar: "var(--color-brand-purple)"
+  },
+  {
+    id: "cvforge",
+    number: "04",
+    title: "CVforge",
+    category: "Carrera Profesional & IA",
+    desc: "Plataforma diseñada para crear currículums de alto impacto y superar los filtros automáticos de inteligencia artificial (ATS) al postularte a tus próximas oportunidades.",
+    img: "/productos/cvforge/cvchuy.png",
+    badge: "En desarrollo",
+    link: "/productos?p=cvforge",
+    imgScale: 1.08,
+    colorVar: "#F59E0B"
   }
 ];
 
@@ -57,12 +69,16 @@ export default function ProductsZigZag() {
   const [activeIndex, setActiveIndex] = useState(0);
   const activeIndexRef = useRef(0);
 
-  useEffect(() => {
+  const numCards = products.length;
+  const slideDuration = numCards - 1;
+  const endHold = 0.6;
+  const slideEndProgress = slideDuration / (slideDuration + endHold);
+
+  useLayoutEffect(() => {
     if (!sectionRef.current || !trackRef.current) return;
 
     const ctx = gsap.context(() => {
       const track = trackRef.current;
-      const numCards = products.length;
 
       // Animación de entrada "Reveal" (se sube)
       gsap.from(sectionRef.current, {
@@ -77,24 +93,33 @@ export default function ProductsZigZag() {
         }
       });
 
+      const tl = gsap.timeline();
+      tl.to(track, {
+        xPercent: -((numCards - 1) / numCards) * 100,
+        duration: slideDuration,
+        ease: "none"
+      }).to(track, {
+        xPercent: -((numCards - 1) / numCards) * 100,
+        duration: endHold,
+        ease: "none"
+      });
+
       // Pin de la sección y animación de desplazamiento horizontal
       ScrollTrigger.create({
         id: "products-pin",
         trigger: sectionRef.current,
         pin: true,
         start: "top top",
-        end: () => `+=${numCards * 100}%`,
-        scrub: 0.8,
+        end: () => `+=${(numCards + 0.6) * 100}%`,
+        scrub: 0.25,
         anticipatePin: 1,
-        animation: gsap.to(track, {
-          xPercent: -((numCards - 1) / numCards) * 100,
-          ease: "none"
-        }),
+        invalidateOnRefresh: true,
+        animation: tl,
         onUpdate: (self) => {
-          const progress = self.progress;
+          const slideProgress = Math.min(1, self.progress / slideEndProgress);
           const calculatedIndex = Math.min(
             numCards - 1,
-            Math.floor(progress * numCards)
+            Math.round(slideProgress * (numCards - 1))
           );
           if (calculatedIndex !== activeIndexRef.current) {
             activeIndexRef.current = calculatedIndex;
@@ -106,7 +131,7 @@ export default function ProductsZigZag() {
     }, sectionRef);
 
     return () => ctx.revert();
-  }, []);
+  }, [numCards, slideDuration, endHold, slideEndProgress]);
 
   const scrollToCard = (index: number) => {
     const st = ScrollTrigger.getById("products-pin");
@@ -114,7 +139,7 @@ export default function ProductsZigZag() {
       const start = st.start;
       const end = st.end;
       const totalScroll = end - start;
-      const targetProgress = index / (products.length - 1);
+      const targetProgress = (index / (numCards - 1)) * slideEndProgress;
       const targetScroll = start + targetProgress * totalScroll;
       
       window.scrollTo({
@@ -150,10 +175,19 @@ export default function ProductsZigZag() {
 
       {/* Viewport y Pista Horizontal */}
       <div className={styles.viewport}>
-        <div className={styles.cardsTrack} ref={trackRef}>
+        <div
+          className={styles.cardsTrack}
+          ref={trackRef}
+          style={{ width: `${numCards * 100}%`, minWidth: `${numCards * 100}%` }}
+        >
           {products.map((product) => {
+            const slideWidth = `${100 / numCards}%`;
             return (
-              <div key={product.id} className={styles.cardSlide}>
+              <div
+                key={product.id}
+                className={styles.cardSlide}
+                style={{ width: slideWidth, minWidth: slideWidth, maxWidth: slideWidth, flex: `0 0 ${slideWidth}` }}
+              >
                 <div className={styles.cardInner}>
                   
                   {/* Columna de Información */}

@@ -159,7 +159,6 @@ export default function DataPilotContent({ active, isTransitioning }: any) {
         trigger: featuresRef.current, start: 'top 75%', once: true,
         onEnter: () => {
           gsap.fromTo('.dp-feat-head', { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.7, ease: 'power3.out' });
-          gsap.fromTo('.dp-feat-card', { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.6, stagger: 0.1, delay: 0.2, ease: 'power3.out' });
         }
       });
 
